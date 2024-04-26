@@ -1,0 +1,18 @@
+#spring.application.name=email
+spring:
+  mail:
+    host: smtp.gmail.com
+    username: hansaniwork1@gmail.com
+    password: qkqp diao hdjs auye
+    port: 587
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+
+server:
+  port: 8081
+
+
