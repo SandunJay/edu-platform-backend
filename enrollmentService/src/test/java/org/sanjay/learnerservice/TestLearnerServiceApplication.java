@@ -17,7 +17,7 @@ public class TestLearnerServiceApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.from(LearnerServiceApplication::main).with(TestLearnerServiceApplication.class).run(args);
+        SpringApplication.from(EnrollmentServiceApplication::main).with(TestLearnerServiceApplication.class).run(args);
     }
 
 }
