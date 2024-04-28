@@ -94,6 +94,16 @@ public class EnrollmentServiceApplicationTests {
 //    }
 
     @Test
+    public void testGetEnrollmentsByUserId() {
+        String userId = "user425";
+        when()
+                .get("/api/v1/enrollment/user/" + userId)
+                .then()
+                .statusCode(200)
+                .body("size()", greaterThanOrEqualTo(1)); // Check there's at least one enrollment
+    }
+
+    @Test
     public void testUpdateProgressTracker() {
         long enrollmentId = 1; // Ensure this ID exists
         String courseId = "c42613"; // Ensure this course ID exists
