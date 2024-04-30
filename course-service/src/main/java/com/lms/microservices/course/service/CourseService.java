@@ -24,19 +24,20 @@ public class CourseService {
 
     public CourseResponse createCourse(CourseRequest courseRequest) {
         Course course = Course.builder()
+                .courseId(courseRequest.courseId())
                 .name(courseRequest.name())
                 .description(courseRequest.description())
                 .price(courseRequest.price())
                 .build();
         courseRepository.save(course);
         log.info("Course created successfully");
-        return new CourseResponse(course.getId(), course.getName(), course.getDescription(), course.getPrice());
+        return new CourseResponse(course.getId(), course.getCourseId(), course.getName(), course.getDescription(), course.getPrice());
     }
 
     public List<CourseResponse> getAllCourses() {
         return courseRepository.findAll()
                 .stream()
-                .map(course -> new CourseResponse(course.getId(), course.getName(), course.getDescription(), course.getPrice()))
+                .map(course -> new CourseResponse(course.getId(), course.getCourseId(), course.getName(), course.getDescription(), course.getPrice()))
                 .toList();
     }
 
@@ -44,7 +45,19 @@ public class CourseService {
         Course course = courseRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Course not found with id " + id));
         log.info("Course found successfully");
-        return new CourseResponse(course.getId(), course.getName(), course.getDescription(), course.getPrice());
+        return new CourseResponse(course.getId(),course.getCourseId(), course.getName(), course.getDescription(), course.getPrice());
+    }
+
+    public CourseResponse getCourseByCourseId(String courseId) {
+        try {
+            Course course = courseRepository.findByCourseId(courseId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Course not found with courseId " + courseId));
+            log.info("Course found successfully with courseId " + courseId);
+            return new CourseResponse(course.getId(), course.getCourseId(), course.getName(), course.getDescription(), course.getPrice());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public CourseResponse updateCourse(String id, CourseRequest courseRequest) {
@@ -55,7 +68,7 @@ public class CourseService {
         course.setPrice(courseRequest.price());
         courseRepository.save(course);
         log.info("Course updated successfully");
-        return new CourseResponse(course.getId(), course.getName(), course.getDescription(), course.getPrice());
+        return new CourseResponse(course.getId(),course.getCourseId(), course.getName(), course.getDescription(), course.getPrice());
     }
 
     public void deleteCourse(String id) {

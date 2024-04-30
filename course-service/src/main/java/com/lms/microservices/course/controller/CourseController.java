@@ -37,6 +37,13 @@ public class CourseController {
         return courseService.getCourseById(id);
     }
 
+    @GetMapping("/by-courseId/{courseId}")
+    @ResponseStatus(HttpStatus.OK)
+    public CourseResponse getCourseByCourseId(@PathVariable String courseId) {
+        return courseService.getCourseByCourseId(courseId);
+    }
+
+
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CourseResponse updateCourse(@PathVariable String id, @RequestBody CourseRequest courseRequest) {
