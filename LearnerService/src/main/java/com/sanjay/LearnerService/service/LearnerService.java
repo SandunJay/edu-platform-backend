@@ -5,5 +5,5 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface LearnerService {
-    ResponseEntity<List<Object>> getEnrolledCourseDetails(String userId);
+    public ResponseEntity<List<String>> getEnrolledCourseDetails(String userId);
 }
