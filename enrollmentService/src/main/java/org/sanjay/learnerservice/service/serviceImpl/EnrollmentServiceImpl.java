@@ -66,6 +66,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
+    public List<EnrollmentDTO> getEnrollmentsByUserId(String userId) {
+        List<Enrollment> enrollments = enrollmentRepository.findByUserId(userId);
+        return enrollments.stream()
+                .map(this::convertToEnrollmentDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public EnrollmentDTO updateEnrollment(Long id, EnrollmentDTO enrollmentDTO) {
        Enrollment enrollment = enrollmentRepository.findById(id).orElseThrow(() -> new RuntimeException("Enrollment not found"));
         enrollment.setUserId(enrollmentDTO.getUserId());

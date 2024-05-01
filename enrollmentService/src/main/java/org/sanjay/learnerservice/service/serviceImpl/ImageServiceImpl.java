@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -42,6 +43,37 @@ public class ImageServiceImpl implements ImageService {
             e.printStackTrace();
             return null;
         }
+    }
+
+
+    @Override
+    public ResponseEntity<Map> uploadMedia(ImageModel imageModel) {
+        if (imageModel.getFile().isEmpty() || imageModel.getName().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        String fileType = imageModel.getFile().getContentType();
+        if (!fileType.startsWith("video/") && !fileType.startsWith("image/")) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        String folderName = fileType.startsWith("video/") ? "videos" : "images";
+
+        Image image = new Image();
+        image.setName(imageModel.getName());
+        String mediaUrl = cloudinaryService.uploadImage(imageModel.getFile(), folderName);
+
+        if (mediaUrl == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        image.setUrl(mediaUrl);
+        imageRepository.save(image);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("url", image.getUrl());
+
+        return ResponseEntity.ok(response);
     }
 
 }
