@@ -50,6 +50,29 @@ public class AuthenticationController {
 //    return ResponseEntity.ok(authenticationResponse);
 //}
 
+//    @PostMapping("/authenticate")
+//    public ResponseEntity<AuthenticationResponse> authenticate(
+//            @RequestBody AuthenticationRequest request,
+//            HttpServletResponse response // Inject HttpServletResponse to modify response
+//    ) {
+//        // Authenticate the user and obtain the authentication response
+//        AuthenticationResponse authenticationResponse = service.authenticate(request);
+//
+//        System.out.println(authenticationResponse);
+//        // Create a cookie with the access token
+//        Cookie accessTokenCookie = new Cookie("accessToken", authenticationResponse.getAccessToken());
+//
+//        // Set additional properties for the cookie
+//        accessTokenCookie.setMaxAge(3600); // Set cookie expiration time (in seconds), e.g., 1 hour
+//        accessTokenCookie.setPath("/"); // Set cookie path to root path
+//
+//        // Add the cookie to the response
+//        response.addCookie(accessTokenCookie);
+//
+//        // Return the authentication response
+//        return ResponseEntity.ok(authenticationResponse);
+//    }
+
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request,
@@ -58,20 +81,46 @@ public class AuthenticationController {
         // Authenticate the user and obtain the authentication response
         AuthenticationResponse authenticationResponse = service.authenticate(request);
 
-        // Create a cookie with the access token
-        Cookie accessTokenCookie = new Cookie("accessToken", authenticationResponse.getAccessToken());
+        System.out.println(authenticationResponse);
 
-        // Set additional properties for the cookie
-        accessTokenCookie.setMaxAge(3600); // Set cookie expiration time (in seconds), e.g., 1 hour
-        accessTokenCookie.setPath("/"); // Set cookie path to root path
+        // Serialize email and access token into a single string
+        String cookieValue = request.getEmail() + "|" + authenticationResponse.getAccessToken();
 
-        // Add the cookie to the response
-        response.addCookie(accessTokenCookie);
+        // Create a cookie with the combined value
+        Cookie userCookie = new Cookie("userCookie", cookieValue);
+        // Set additional properties for the user cookie
+        userCookie.setMaxAge(3600); // Set cookie expiration time (in seconds), e.g., 1 hour
+        userCookie.setPath("/"); // Set cookie path to root path
+        // Add the user cookie to the response
+        response.addCookie(userCookie);
 
         // Return the authentication response
         return ResponseEntity.ok(authenticationResponse);
     }
 
+
+    @GetMapping("/access-user-cookie")
+    public ResponseEntity<String> accessUserCookie(HttpServletRequest request) {
+        // Retrieve cookies from the request
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("userCookie")) {
+                    // Get the value of the userCookie
+                    String cookieValue = cookie.getValue();
+                    // Split the value to extract email and access token
+                    String[] parts = cookieValue.split("\\|");
+                    if (parts.length == 2) {
+                        String email = parts[0];
+                        String accessToken = parts[1];
+                        // Do something with email and accessToken
+                        return ResponseEntity.ok("Email: " + email + ", Access Token: " + accessToken);
+                    }
+                }
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
 
 
     @PostMapping("/refresh-token")
