@@ -22,47 +22,64 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
 
+    public String generateUniqueId() {
+        String id;
+        do {
+            id = "IT" + (int)(Math.random() * 10000);
+        } while(courseRepository.existsById(id));
+        return id;
+    }
+
     public CourseResponse createCourse(CourseRequest courseRequest) {
         Course course = Course.builder()
+                .courseId(generateUniqueId())
                 .name(courseRequest.name())
+                .author(courseRequest.author())
                 .description(courseRequest.description())
                 .price(courseRequest.price())
                 .build();
         courseRepository.save(course);
         log.info("Course created successfully");
-        return new CourseResponse(course.getId(), course.getName(), course.getDescription(), course.getPrice());
+        return new CourseResponse(course.getId(), course.getCourseId(),course.getName(),course.getAuthor(), course.getDescription(), course.getPrice());
     }
 
     public List<CourseResponse> getAllCourses() {
         return courseRepository.findAll()
                 .stream()
-                .map(course -> new CourseResponse(course.getId(), course.getName(), course.getDescription(), course.getPrice()))
+                .map(course -> new CourseResponse(course.getId(),course.getCourseId(), course.getName(),course.getAuthor(), course.getDescription(), course.getPrice()))
                 .toList();
     }
 
-    public CourseResponse getCourseById(String id) {
-        Course course = courseRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Course not found with id " + id));
+    public CourseResponse getCourseById(String courseId) {
+        Course course = courseRepository.findByCourseId(courseId)
+            .orElseThrow(() -> new ResourceNotFoundException("Course not found with id " + courseId));
         log.info("Course found successfully");
-        return new CourseResponse(course.getId(), course.getName(), course.getDescription(), course.getPrice());
+        return new CourseResponse(course.getId(),course.getCourseId(), course.getName(), course.getAuthor(),course.getDescription(), course.getPrice());
     }
 
     public CourseResponse updateCourse(String id, CourseRequest courseRequest) {
-        Course course = courseRepository.findById(id)
+        Course course = courseRepository.findByCourseId(id)
             .orElseThrow(() -> new ResourceNotFoundException("Course not found with id " + id));
         course.setName(courseRequest.name());
+        course.setAuthor(courseRequest.author());
         course.setDescription(courseRequest.description());
         course.setPrice(courseRequest.price());
         courseRepository.save(course);
         log.info("Course updated successfully");
-        return new CourseResponse(course.getId(), course.getName(), course.getDescription(), course.getPrice());
+        return new CourseResponse(course.getId(), course.getCourseId(),course.getName(),course.getAuthor(), course.getDescription(), course.getPrice());
     }
 
     public void deleteCourse(String id) {
-        Course course = courseRepository.findById(id)
+        Course course = courseRepository.findByCourseId(id)
             .orElseThrow(() -> new ResourceNotFoundException("Course not found with id " + id));
         courseRepository.delete(course);
         log.info("Course deleted successfully");
+    }
+
+    public boolean existsCourseById(String id) {
+
+        return courseRepository.existsByCourseId(id);
+
     }
 
 }

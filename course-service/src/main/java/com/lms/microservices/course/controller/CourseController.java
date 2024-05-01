@@ -48,4 +48,10 @@ public class CourseController {
     public void deleteCourse(@PathVariable String id) {
     courseService.deleteCourse(id);
     }
+
+    @GetMapping("/{courseId}/exists")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean existsCourseById(@PathVariable String courseId) {
+        return courseService.existsCourseById(courseId);
+    }
 }
