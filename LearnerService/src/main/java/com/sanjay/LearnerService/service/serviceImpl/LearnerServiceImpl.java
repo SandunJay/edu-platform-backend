@@ -23,33 +23,6 @@ public class LearnerServiceImpl implements LearnerService {
     private final ContentClient contentClient;
 
 
-
-//    @Override
-//    public ResponseEntity<List<String>> getEnrolledCourseDetails(String userId) {
-//        ResponseEntity<List<EnrollmentDTO>> enrollmentResponse = enrollmentClient.getEnrollmentsByUserId(userId);
-//
-//        List<EnrollmentDTO> enrollments = enrollmentResponse.getBody();
-//
-//        if (enrollments == null || enrollments.isEmpty()) {
-//            return ResponseEntity.ok(Collections.emptyList());
-//        }
-//
-//        Set<String> uniqueCourseIds = new HashSet<>();
-//        for (EnrollmentDTO enrollment : enrollments) {
-//            if (enrollment.getEnrollmentItemsList() != null) {
-//                for (EnrollmentItemsDTO item : enrollment.getEnrollmentItemsList()) {
-//                    if (item.getCourseId() != null) {
-//                        uniqueCourseIds.add(item.getCourseId());
-//                    }
-//                }
-//            }
-//        }
-//
-//        List<String> courseIdsList = new ArrayList<>(uniqueCourseIds);
-//        return ResponseEntity.ok(courseIdsList);
-//    }
-
-
     @Override
     public ResponseEntity<CourseDetailsMapDTO> getEnrolledCourseDetails(String userId) {
         ResponseEntity<List<EnrollmentDTO>> enrollmentResponse = enrollmentClient.getEnrollmentsByUserId(userId);
@@ -97,20 +70,23 @@ public class LearnerServiceImpl implements LearnerService {
 
     @Override
     public EnrollmentDTO updateProgress(Long enrollmentId, String contentId) {
+        String defaultCourseId = "xyz85";
+
         try{
             ContentResponse contentResponse = contentClient.getContentById(contentId);
+            String courseId = contentResponse.courseId();
+
             if (contentResponse == null) {
                 throw new RuntimeException("Content not found");
             }
-            String courseId = contentResponse.courseId();
 
             ProgressTrackerDTO progressTrackerDTO = new ProgressTrackerDTO();
-            progressTrackerDTO.setContentId(String.valueOf(contentResponse.id()));
+            progressTrackerDTO.setContentId(contentId);
             progressTrackerDTO.setAddedDate(LocalDateTime.now());
             progressTrackerDTO.setLastUpdatedDate(LocalDateTime.now());
-            
+
             try{
-                return enrollmentClient.updateProgress(enrollmentId, courseId, progressTrackerDTO);
+                return enrollmentClient.updateProgress(enrollmentId, defaultCourseId, progressTrackerDTO);
             }catch (Exception e){
                 e.printStackTrace();
             }

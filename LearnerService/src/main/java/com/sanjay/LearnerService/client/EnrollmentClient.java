@@ -13,11 +13,14 @@ public interface EnrollmentClient {
     @RequestMapping(method = RequestMethod.GET, value = "/api/v1/enrollment/user/{userId}")
     ResponseEntity<List<EnrollmentDTO>> getEnrollmentsByUserId(@PathVariable("userId") String userId);
 
-    @PatchMapping("/api/v1/enrollment/{enrollmentId}/progress")
-    @RequestMapping(method = RequestMethod.PATCH, value = "/api/v1/enrollment/user/{userId}")
+    @RequestMapping(
+            method = RequestMethod.PATCH,
+            value = "/api/v1/enrollment/{enrollmentId}/courses/{courseId}/progress"
+    )
     EnrollmentDTO updateProgress(
-            @PathVariable Long enrollmentId,
-            @PathVariable String courseId,
-            @RequestBody ProgressTrackerDTO progressTrackerDTO);
+            @PathVariable("enrollmentId") Long enrollmentId,
+            @PathVariable("courseId") String courseId,
+            @RequestBody ProgressTrackerDTO progressTrackerDTO
+    );
 
 }

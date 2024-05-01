@@ -35,9 +35,7 @@ public class LearnerServiceController {
     }
 
     @PatchMapping("/enrollments/{enrollmentId}/content/{contentId}")
-    public ResponseEntity<EnrollmentDTO> patchWatchedContent(
-            @PathVariable Long enrollmentId,
-            @PathVariable String contentId) {
+    public ResponseEntity<EnrollmentDTO> patchWatchedContent(@PathVariable Long enrollmentId, @PathVariable String contentId) {
 
         EnrollmentDTO updatedEnrollment = learnerService.updateProgress(enrollmentId, contentId);
 
