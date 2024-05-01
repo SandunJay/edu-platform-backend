@@ -6,6 +6,7 @@ import com.userproject.demo.token.Token;
 import com.userproject.demo.token.TokenRepository;
 import com.userproject.demo.token.TokenType;
 import com.userproject.demo.user.Role;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -119,4 +120,33 @@ public class AuthenticationService {
             }
         }
     }
+
+    public boolean isValidUser(String jwtToken) {
+        // Extract user email from JWT token
+        String userEmail = jwtService.extractUsername(jwtToken);
+
+        if (userEmail != null) {
+            // Check if the user exists in the database
+           // return tokenRepository.existsByToken(jwtToken);
+            return repository.existsByEmail(jwtToken);
+        } else {
+            return false; // If email is not found in token
+        }
+    }
+
+//    public boolean isValidUser(String jwtToken) {
+//        // Validate and decode JWT token
+//        Claims claims = jwtService.decodeJWT(jwtToken);
+//
+//        if (claims != null && claims.getSubject() != null) {
+//            // Extract user email from decoded claims
+//            String userEmail = claims.getSubject();
+//
+//            // Check if the user exists in the database
+//            return repository.existsByEmail(userEmail);
+//        } else {
+//            return false; // If token is invalid or doesn't contain user email
+//        }
+//    }
+
 }

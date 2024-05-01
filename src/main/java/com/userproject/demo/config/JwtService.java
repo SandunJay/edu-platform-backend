@@ -1,8 +1,13 @@
 package com.userproject.demo.config;
 
+import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.crypto.RSASSAVerifier;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.impl.DefaultClaims;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -97,4 +103,32 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
+    public Claims decodeJWT(String jwtToken, RSAPublicKey publicKey) {
+        try {
+            // Parse the token
+            SignedJWT signedJWT = SignedJWT.parse(jwtToken);
+
+            // Create a verifier for RSA signatures
+            JWSVerifier verifier = new RSASSAVerifier(publicKey);
+
+            // Verify the token's signature
+            if (!signedJWT.verify(verifier)) {
+                // Signature verification failed
+                return null;
+            }
+
+            // Extract the JWT claims
+            JWTClaimsSet claimsSet = signedJWT.getJWTClaimsSet();
+
+            // Convert Nimbus claims to Spring Security claims
+            Claims claims = new DefaultClaims();
+            claims.putAll(claimsSet.getClaims());
+
+            return claims;
+        } catch (Exception e) {
+            // Token parsing or verification failed
+            e.printStackTrace(); // Handle the error appropriately
+            return null;
+        }
+    }
 }
