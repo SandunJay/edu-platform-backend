@@ -1,13 +1,11 @@
 package com.userproject.demo.auth;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -24,12 +22,57 @@ public class AuthenticationController {
     ) {
         return ResponseEntity.ok(service.register(request));
     }
+//    @PostMapping("/authenticate")
+//    public ResponseEntity<AuthenticationResponse> authenticate(
+//            @RequestBody AuthenticationRequest request
+//    ) {
+//        return ResponseEntity.ok(service.authenticate(request));
+//    }
+//@PostMapping("/authenticate")
+//public ResponseEntity<AuthenticationResponse> authenticate(
+//        @RequestBody AuthenticationRequest request,
+//        HttpServletResponse response // Inject HttpServletResponse to modify response
+//) {
+//    // Authenticate the user and obtain the authentication response
+//    AuthenticationResponse authenticationResponse = service.authenticate(request);
+//
+//    // Create a cookie with the user details
+//    Cookie userCookie = new Cookie("userCookie", authenticationResponse.getUserDetails());
+//
+//    // Set additional properties for the cookie
+//    userCookie.setMaxAge(3600); // Set cookie expiration time (in seconds), e.g., 1 hour
+//    userCookie.setPath("/"); // Set cookie path to root path
+//
+//    // Add the cookie to the response
+//    response.addCookie(userCookie);
+//
+//    // Return the authentication response
+//    return ResponseEntity.ok(authenticationResponse);
+//}
+
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
-            @RequestBody AuthenticationRequest request
+            @RequestBody AuthenticationRequest request,
+            HttpServletResponse response // Inject HttpServletResponse to modify response
     ) {
-        return ResponseEntity.ok(service.authenticate(request));
+        // Authenticate the user and obtain the authentication response
+        AuthenticationResponse authenticationResponse = service.authenticate(request);
+
+        // Create a cookie with the access token
+        Cookie accessTokenCookie = new Cookie("accessToken", authenticationResponse.getAccessToken());
+
+        // Set additional properties for the cookie
+        accessTokenCookie.setMaxAge(3600); // Set cookie expiration time (in seconds), e.g., 1 hour
+        accessTokenCookie.setPath("/"); // Set cookie path to root path
+
+        // Add the cookie to the response
+        response.addCookie(accessTokenCookie);
+
+        // Return the authentication response
+        return ResponseEntity.ok(authenticationResponse);
     }
+
+
 
     @PostMapping("/refresh-token")
     public void refreshToken(
@@ -39,5 +82,14 @@ public class AuthenticationController {
         service.refreshToken(request, response);
     }
 
+
+    @GetMapping("/check-user-validity")
+    public ResponseEntity<Boolean> checkUserValidity(@RequestBody String jwtToken) {
+        System.out.println(jwtToken);
+        boolean isValidUser = service.isValidUser(jwtToken);
+        System.out.println(isValidUser);
+
+        return ResponseEntity.ok(isValidUser);
+    }
 
 }
