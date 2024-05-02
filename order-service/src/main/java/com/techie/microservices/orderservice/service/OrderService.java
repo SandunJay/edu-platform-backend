@@ -1,9 +1,8 @@
 package com.techie.microservices.orderservice.service;
 
 import com.techie.microservices.orderservice.client.CourseClient;
-import com.techie.microservices.orderservice.dto.CourseResponse;
-import com.techie.microservices.orderservice.dto.OrderRequest;
-import com.techie.microservices.orderservice.dto.OrderResponse;
+import com.techie.microservices.orderservice.client.EnrollmentClient;
+import com.techie.microservices.orderservice.dto.*;
 import com.techie.microservices.orderservice.model.Order;
 import com.techie.microservices.orderservice.repository.OrderRepositiory;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,9 @@ public class OrderService {
 
     @Autowired
     private CourseClient courseClient;
+
+    @Autowired
+    private EnrollmentClient enrollmentClient;
 
     public OrderResponse placeOrder(OrderRequest orderRequest) {
 
@@ -45,6 +49,22 @@ public class OrderService {
         //save order to order repository
         orderRepositiory.save(order);
         log.info("Order Placed successfully");
+
+        // create EnrollmentDTO and set fields
+        EnrollmentDTO enrollmentDTO = new EnrollmentDTO();
+        enrollmentDTO.setUserId(order.getUserId());
+        enrollmentDTO.setEnrollmentDate(order.getOrderDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+        enrollmentDTO.setEnrollmentItemsList(order.getCourseIds().stream()
+                .map(courseId -> {
+                    EnrollmentItemsDTO item = new EnrollmentItemsDTO();
+                    item.setCourseId(courseId.toString());
+                    item.setCompleted(false);
+                    return item;
+                })
+                .collect(Collectors.toList()));
+
+        // call createEnrollment method
+        enrollmentClient.createEnrollment(enrollmentDTO);
 
 
         return new OrderResponse(order.getId(), order.getOrderNumber(), order.getCourseIds(), order.getUserId(), order.getTotalPrice(), order.getOrderDate());
