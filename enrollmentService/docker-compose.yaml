@@ -7,6 +7,7 @@ services:
       - "3305:3306"  # Correct port mapping
     environment:
       - MYSQL_ROOT_PASSWORD=root  # Corrected environment variable syntax
+      - MYSQL_DATABASE=enrollment_service
     volumes:
         - ./mysql/data:/var/lib/mysql
         - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql

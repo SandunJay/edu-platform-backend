@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="course-service" />
+        <module name="enrollmentService" />
+        <module name="contents-service" />
+        <module name="LearnerService" />
+        <module name="order-service" />
+        <module name="demo" />
+        <module name="email" />
+        <module name="adminTask-Service" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="LearnerService" options="-parameters" />
+      <module name="adminTask-Service" options="-parameters" />
+      <module name="contents-service" options="-parameters" />
+      <module name="course-service" options="-parameters" />
+      <module name="demo" options="-parameters" />
+      <module name="email" options="-parameters" />
+      <module name="enrollmentService" options="-parameters" />
+      <module name="order-service" options="-parameters" />
+    </option>
+  </component>
+</project>
