@@ -18,6 +18,7 @@ target/
 *.iws
 *.iml
 *.ipr
+/.idea/
 
 ### NetBeans ###
 /nbproject/private/
@@ -30,5 +31,7 @@ build/
 !**/src/test/**/build/
 /mysql/mysql.sock
 /mysql/data/mysql.sock
+/mysql/
+mysql/
 ### VS Code ###
 .vscode/
