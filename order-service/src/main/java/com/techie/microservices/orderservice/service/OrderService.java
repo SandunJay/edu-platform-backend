@@ -2,6 +2,7 @@ package com.techie.microservices.orderservice.service;
 
 import com.techie.microservices.orderservice.client.CourseClient;
 import com.techie.microservices.orderservice.client.EnrollmentClient;
+import com.techie.microservices.orderservice.client.UserClient;
 import com.techie.microservices.orderservice.dto.*;
 import com.techie.microservices.orderservice.model.Order;
 import com.techie.microservices.orderservice.repository.OrderRepositiory;
@@ -28,7 +29,30 @@ public class OrderService {
     @Autowired
     private EnrollmentClient enrollmentClient;
 
+    @Autowired
+    private UserClient userClient;
+
     public OrderResponse placeOrder(OrderRequest orderRequest) {
+
+        //get jwt token from userClient
+        UserCookieResponse userCookieResponse = userClient.accessUserCookie();
+        String jwtToken = userCookieResponse.token();
+
+        // Validate userId
+        String userEmail;
+        try {
+            boolean isValidUser = userClient.checkUserValidity(jwtToken);
+            if (!isValidUser) {
+                throw new IllegalArgumentException("Invalid user");
+            }
+
+            // Get user's email
+            userEmail = userCookieResponse.email();
+
+        } catch (Exception e) {
+            log.error("User validation failed", e);
+            throw new RuntimeException("User validation failed", e);
+        }
 
         // Validate courseIds
         Set<Long> courseIds = orderRequest.courseIds();
@@ -43,7 +67,7 @@ public class OrderService {
         order.setOrderNumber(UUID.randomUUID().toString());
         order.setTotalPrice(totalPrice);
         order.setCourseIds(courseIds);
-        order.setUserId(orderRequest.userId());
+        order.setUserId(userEmail);
         order.setOrderDate(orderRequest.orderDate());
 
         //save order to order repository
