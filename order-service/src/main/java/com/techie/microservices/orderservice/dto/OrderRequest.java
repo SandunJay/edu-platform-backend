@@ -6,6 +6,5 @@ import java.util.List;
 import java.util.Set;
 
 public record OrderRequest(Long id, String orderNumber, Set<Long> courseIds, String userId , BigDecimal totalPrice, Date orderDate) {
-    public OrderRequest {
-    }
+
 }
