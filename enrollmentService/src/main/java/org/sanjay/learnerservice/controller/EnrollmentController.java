@@ -36,6 +36,12 @@ public class EnrollmentController {
         return ResponseEntity.ok(enrollments);
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<EnrollmentDTO>> getEnrollmentsByUserId(@PathVariable String userId) {
+        List<EnrollmentDTO> enrollments = enrollmentService.getEnrollmentsByUserId(userId);
+        return ResponseEntity.ok(enrollments);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<EnrollmentDTO> updateEnrollment(@PathVariable Long id, @RequestBody EnrollmentDTO enrollmentDTO) {
         EnrollmentDTO updatedEnrollment = enrollmentService.updateEnrollment(id, enrollmentDTO);
@@ -53,28 +59,6 @@ public class EnrollmentController {
         EnrollmentItemsDTO addedEnrollmentItem = enrollmentService.addEnrollmentItems(enrollmentId, enrollmentItemsDTO);
         return ResponseEntity.ok(addedEnrollmentItem);
     }
-
-//    @PatchMapping("/progress-tracker/{progressTrackerId}")
-//    public ResponseEntity<ProgressTrackerDTO> patchProgressTracker(@PathVariable Long progressTrackerId, @RequestBody ProgressTrackerDTO progressTrackerDTO) {
-//        ProgressTrackerDTO updatedProgressTracker = enrollmentService.patchProgressTracker(progressTrackerId, progressTrackerDTO);
-//        return ResponseEntity.ok(updatedProgressTracker);
-//    }
-
-//    @PostMapping("/{enrollmentId}/{courseId}/progress")
-//    public ResponseEntity<ProgressTrackerDTO> addProgressTracker(
-//            @PathVariable Long enrollmentId,
-//            @PathVariable String courseId,
-//            @RequestBody ProgressTrackerDTO progressTrackerDTO) {
-//
-//        // Call the service method to add a progress tracker
-//        ProgressTrackerDTO newProgressTracker = enrollmentService.addProgressTracker(
-//                enrollmentId,
-//                courseId,
-//                progressTrackerDTO);
-//
-//        // Return the newly added progress tracker
-//        return ResponseEntity.ok(newProgressTracker);
-//    }
 
     @PatchMapping("/{enrollmentId}/courses/{courseId}/progress")
     public ResponseEntity<EnrollmentDTO> updateProgress(

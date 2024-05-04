@@ -28,7 +28,6 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
-/mysql/
-mysql/
+/mysql/mysql.sock
 ### VS Code ###
 .vscode/

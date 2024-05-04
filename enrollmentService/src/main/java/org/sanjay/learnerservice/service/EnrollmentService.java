@@ -24,4 +24,6 @@ public interface EnrollmentService {
 //    ProgressTrackerDTO addProgressTracker(Long enrollmentId, String courseId, ProgressTrackerDTO progressTrackerDTO);
 
     EnrollmentDTO updateProgressTracker(Long enrollmentId, String courseId, ProgressTrackerDTO progressTrackerDTO);
+
+    List<EnrollmentDTO> getEnrollmentsByUserId(String userId);
 }
