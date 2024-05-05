@@ -16,7 +16,13 @@ public class ProgressTracker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "content_id")
     private String contentId;
+
+    @Column(name = "added_date")
     private LocalDateTime addedDate;
+
+    @Column(name = "last_updated_date")
     private LocalDateTime lastUpdatedDate;
 }

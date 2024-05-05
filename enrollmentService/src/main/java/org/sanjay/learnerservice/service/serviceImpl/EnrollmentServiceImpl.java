@@ -125,6 +125,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             enrollmentItem.setProgressTrackerItemsList(new ArrayList<>());
         }
 
+        // Check if a ProgressTracker with the same contentId already exists
+        boolean progressTrackerExists = enrollmentItem.getProgressTrackerItemsList().stream()
+                .anyMatch(pt -> pt.getContentId().equals(progressTrackerDTO.getContentId()));
+
+        if (progressTrackerExists) {
+            throw new RuntimeException("ProgressTracker with this contentId already exists");
+        }
+
         if (progressTrackerDTO.getId() != null) {
             // If ID is provided, find and update the existing ProgressTracker
             progressTracker = enrollmentItem.getProgressTrackerItemsList().stream()

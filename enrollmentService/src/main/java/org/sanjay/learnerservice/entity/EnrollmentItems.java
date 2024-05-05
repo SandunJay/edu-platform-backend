@@ -17,8 +17,10 @@ public class EnrollmentItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "course_id")
     private String courseId;
 
+    @Column(name = "is_completed")
     private boolean isCompleted;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
