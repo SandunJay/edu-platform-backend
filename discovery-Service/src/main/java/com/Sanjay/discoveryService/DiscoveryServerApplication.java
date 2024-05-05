@@ -1,13 +1,13 @@
-package com.lms.microservices.content;
+package com.Sanjay.discoveryService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ContentServiceApplication {
+public class DiscoveryServerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ContentServiceApplication.class, args);
+		SpringApplication.run(DiscoveryServerApplication.class, args);
 	}
 
 }
