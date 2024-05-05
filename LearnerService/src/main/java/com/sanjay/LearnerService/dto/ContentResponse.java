@@ -1,6 +1,6 @@
-package com.sanjay.LearnerService.DTO;
+package com.sanjay.LearnerService.dto;
 
 import java.util.Date;
 
-public record ContentResponse(Long id, String title, String description, String courseId , Date createdDate, Date lastUpdatedDate) {
+public record ContentResponse(String id, String title, String description, String courseId , Date createdDate, Date lastUpdatedDate) {
 }

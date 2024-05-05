@@ -17,25 +17,26 @@ public class ContentController {
 
     private final ContentService contentService;
 
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public String createContent(@RequestBody ContentRequest contentRequest) {
-
         contentService.createContent(contentRequest);
-
         return "Content created successfully!";
     }
 
-
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ContentResponse updateContent(@PathVariable Long id, @RequestBody ContentRequest contentRequest) {
+    public ContentResponse updateContent(@PathVariable String id, @RequestBody ContentRequest contentRequest) {
         return contentService.updateContent(id, contentRequest);
     }
 
     @GetMapping("/course/{courseId}")
-    public List<Content> getContentsByCourseId(@PathVariable String courseId) {
+    public List<ContentResponse> getContentsByCourseId(@PathVariable("courseId") String courseId) {
         return contentService.getContentsByCourseId(courseId);
+    }
+
+    @GetMapping("/{contentId}")
+    public ContentResponse getContentById(@PathVariable String contentId) {
+        return contentService.getContentById(contentId);
     }
 }

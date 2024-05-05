@@ -1,4 +1,4 @@
-package com.sanjay.LearnerService.DTO;
+package com.sanjay.LearnerService.dto;
 
 import java.util.Map;
 
