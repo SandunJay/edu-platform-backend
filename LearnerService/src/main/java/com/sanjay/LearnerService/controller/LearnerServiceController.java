@@ -1,17 +1,12 @@
 package com.sanjay.LearnerService.controller;
 
-import com.sanjay.LearnerService.DTO.ContentDetailsMapDTO;
-import com.sanjay.LearnerService.DTO.CourseDetailsMapDTO;
-import com.sanjay.LearnerService.DTO.CourseResponse;
-import com.sanjay.LearnerService.DTO.EnrollmentDTO;
+import com.sanjay.LearnerService.dto.ContentDetailsMapDTO;
+import com.sanjay.LearnerService.dto.CourseDetailsMapDTO;
+import com.sanjay.LearnerService.dto.EnrollmentDTO;
 import com.sanjay.LearnerService.service.LearnerService;
-import com.sanjay.LearnerService.service.serviceImpl.LearnerServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/learner")

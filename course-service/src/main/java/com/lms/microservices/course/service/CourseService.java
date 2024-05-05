@@ -54,6 +54,12 @@ public class CourseService {
         try {
             Course course = courseRepository.findByCourseId(courseId)
                     .orElseThrow(() -> new ResourceNotFoundException("Course not found with courseId " + courseId));
+
+            if (course == null) {
+                log.info("Course not found with courseId " + courseId);
+                return null;
+            }
+
             log.info("Course found successfully with courseId " + courseId);
             return new CourseResponse(course.getId(), course.getCourseId(), course.getName(), course.getAuthor(), course.getDescription(), course.getPrice());
         } catch (Exception e) {
