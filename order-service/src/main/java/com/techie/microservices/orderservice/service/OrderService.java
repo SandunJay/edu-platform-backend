@@ -2,6 +2,7 @@ package com.techie.microservices.orderservice.service;
 
 import com.techie.microservices.orderservice.client.CourseClient;
 import com.techie.microservices.orderservice.client.EnrollmentClient;
+import com.techie.microservices.orderservice.client.PaymentClient;
 import com.techie.microservices.orderservice.client.UserClient;
 import com.techie.microservices.orderservice.dto.*;
 import com.techie.microservices.orderservice.model.Order;
@@ -31,6 +32,9 @@ public class OrderService {
 
     @Autowired
     private UserClient userClient;
+
+    @Autowired
+    private PaymentClient paymentClient;
 
     public OrderResponse placeOrder(OrderRequest orderRequest) {
 
@@ -73,6 +77,19 @@ public class OrderService {
         //save order to order repository
         orderRepositiory.save(order);
         log.info("Order Placed successfully");
+
+        // Create payment session
+        Map<String, Object> paymentRequest = new HashMap<>();
+        paymentRequest.put("amount", orderRequest.totalPrice().multiply(new BigDecimal(100)).longValue()); // Stripe expects the amount in cents
+        paymentRequest.put("productDescription", "Order " + order.getOrderNumber());
+        Map<String, Object> paymentResponse = paymentClient.createSession(paymentRequest);
+        String paymentSessionId = (String) paymentResponse.get("sessionId");
+
+        // Check payment status
+        String paymentIntentId = paymentClient.getPaymentIntent(paymentSessionId);
+        if (paymentIntentId == null) {
+            throw new RuntimeException("Payment failed");
+        }
 
         // create EnrollmentDTO and set fields
         EnrollmentDTO enrollmentDTO = new EnrollmentDTO();
