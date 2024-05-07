@@ -9,29 +9,33 @@
         <relativePath />
     </parent>
 
-    <groupId>com.sanjay</groupId>
-    <artifactId>edu-platform-ds</artifactId>
+    <groupId>com.edu.platform</groupId>
+    <artifactId>edu-platform</artifactId>
     <version>1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
         <java.version>21</java.version>
         <spring-cloud.version>2023.0.1</spring-cloud.version>
-        <sonar.projectKey>sanjay-edu-platform-ds</sonar.projectKey>
+        <sonar.projectKey>lms-edu-platform-ds</sonar.projectKey>
         <sonar.organization>sanjay</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <modules>
         <module>discovery-service</module>
-        <module>config-service</module>
-<!--        <module>employee-service</module>-->
-<!--        <module>department-service</module>-->
-<!--        <module>organization-service</module>-->
-        <module>gateway-service</module>
-        <module>enrollmentService</module>
-        <module>course-service</module>
+        <module>api-gateway</module>
+        <module>config-server</module>
         <module>adminTask-Service</module>
+        <module>content-service</module>
+        <module>course-service</module>
+        <module>discovery-Service</module>
+        <module>email-service</module>
+        <module>enrollmentService</module>
+        <module>learnerService</module>
+        <module>order-service</module>
+        <module>payment-service</module>
+        <module>user-service</module>
     </modules>
 
     <dependencyManagement>
