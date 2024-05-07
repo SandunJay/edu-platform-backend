@@ -29,8 +29,7 @@ public class ApiGatewayApplication {
 
 	@Bean
 	@Lazy(false)
-	public Set<AbstractSwaggerUiConfigProperties.SwaggerUrl> apis(RouteDefinitionLocator locator,
-																  SwaggerUiConfigParameters swaggerUiConfigParameters) {
+	public Set<AbstractSwaggerUiConfigProperties.SwaggerUrl> apis(RouteDefinitionLocator locator,SwaggerUiConfigParameters swaggerUiConfigParameters) {
 		Set<AbstractSwaggerUiConfigProperties.SwaggerUrl> urls = new HashSet<>();
 		List<RouteDefinition> definitions = locator.getRouteDefinitions().collectList().block();
 		definitions.stream().filter(routeDefinition -> routeDefinition.getId().matches(".*-service")).forEach(routeDefinition -> {
