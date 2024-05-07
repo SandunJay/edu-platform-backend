@@ -11,7 +11,7 @@ services:
     ports:
       - "8088:8088"
     healthcheck:
-      test: curl --fail http://localhost:8088/employee/docker  || exit 1
+      test: curl --fail http://localhost:8088/enrollment/docker  || exit 1
       interval: 5s
       timeout: 2s
       retries: 3
@@ -31,8 +31,8 @@ services:
       retries: 3
     environment:
       SPRING_PROFILES_ACTIVE: docker
-  employee-service:
-    image: lms/employee-service:1.2-SNAPSHOT
+  adminTask-service:
+    image: lms/admin-service:1.2-SNAPSHOT
     ports:
       - "8080"
     depends_on:
@@ -44,8 +44,22 @@ services:
       - zipkin
     environment:
       SPRING_PROFILES_ACTIVE: docker
-  department-service:
-    image: lms/department-service:1.2-SNAPSHOT
+  content-service:
+    image: lms/content-service:1.2-SNAPSHOT
+    ports:
+      - "8080"
+    depends_on:
+        discovery-service:
+            condition: service_healthy
+    links:
+        - config-service
+        - discovery-service
+        - zipkin
+        - adminTask-service
+    environment:
+        SPRING_PROFILES_ACTIVE: docker
+  course-service:
+    image: lms/course-service:1.2-SNAPSHOT
     ports:
       - "8080"
     depends_on:
@@ -54,12 +68,13 @@ services:
     links:
       - config-service
       - discovery-service
-      - employee-service
       - zipkin
+      - adminTask-service
+      - content-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
-  organization-service:
-    image: lms/organization-service:1.2-SNAPSHOT
+  email-service:
+    image: lms/email-service:1.2-SNAPSHOT
     ports:
       - "8080"
     depends_on:
@@ -68,9 +83,105 @@ services:
     links:
       - config-service
       - discovery-service
-      - employee-service
-      - department-service
       - zipkin
+      - adminTask-service
+      - content-service
+      - course-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+  enrollment-service:
+    image: lms/enrollment-service:1.2-SNAPSHOT
+    ports:
+      - "8080"
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+    links:
+      - config-service
+      - discovery-service
+      - zipkin
+      - adminTask-service
+      - content-service
+      - course-service
+      - email-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+  learner-service:
+    image: lms/learner-service:1.2-SNAPSHOT
+    ports:
+      - "8080"
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+    links:
+      - config-service
+      - discovery-service
+      - zipkin
+      - adminTask-service
+      - content-service
+      - course-service
+      - email-service
+      - enrollment-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+  order-service:
+    image: lms/order-service:1.2-SNAPSHOT
+    ports:
+      - "8080"
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+    links:
+      - config-service
+      - discovery-service
+      - zipkin
+      - adminTask-service
+      - content-service
+      - course-service
+      - email-service
+      - enrollment-service
+      - learner-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+  payment-service:
+    image: lms/payment-service:1.2-SNAPSHOT
+    ports:
+      - "8080"
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+    links:
+      - config-service
+      - discovery-service
+      - zipkin
+      - adminTask-service
+      - content-service
+      - course-service
+      - email-service
+      - enrollment-service
+      - learner-service
+      - order-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+  user-service:
+    image: lms/user-service:1.2-SNAPSHOT
+    ports:
+      - "8080"
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+    links:
+      - config-service
+      - discovery-service
+      - zipkin
+      - adminTask-service
+      - content-service
+      - course-service
+      - email-service
+      - enrollment-service
+      - learner-service
+      - order-service
+      - payment-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
   gateway-service:
@@ -85,7 +196,13 @@ services:
     links:
       - config-service
       - discovery-service
-      - employee-service
-      - department-service
-      - organization-service
+      - adminTask-service
+      - content-service
+      - course-service
+      - email-service
+      - enrollment-service
+      - learner-service
+      - order-service
+      - payment-service
+      - user-service
       - zipkin

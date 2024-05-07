@@ -1,30 +1,16 @@
-spring:
-  config:
-    import: "optional:configserver:http://config-service:8088"
-    activate:
-      on-profile: docker
----
-spring:
-  application:
-    name: payment-service
-  config:
-    import: "optional:configserver:http://localhost:8088"
+server:
+  port: 8088
 
+spring:
+  profiles:
+    active: native
+  output:
+    ansi:
+      enabled: always
+  banner:
+    location: banner.txt
 
-#server:
-#  port: 8088
-#
-#spring:
-#  application:
-#    name: config-server
-#  profiles:
-#    active: native
-#  output:
-#    ansi:
-#      enabled: always
-#  banner:
-#    location: banner.txt
-#
-#logging:
-#  pattern:
-#    console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){blue} %clr(${LOG_LEVEL_PATTERN:-%5p}) %m%n"
+logging:
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){blue} %clr(${LOG_LEVEL_PATTERN:-%5p}) %m%n"
+
