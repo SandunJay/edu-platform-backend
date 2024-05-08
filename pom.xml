@@ -29,7 +29,6 @@
         <module>admin-Service</module>
         <module>content-service</module>
         <module>course-service</module>
-        <module>discovery-Service</module>
         <module>email-service</module>
         <module>enrollmentService</module>
         <module>learnerService</module>
