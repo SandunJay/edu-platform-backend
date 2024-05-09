@@ -1,64 +1,137 @@
-server:
-  port: 8060
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://discovery-service:8061/eureka/
-
-logging:
-  pattern: 
-    console: "%d{yyyy-MM-dd HH:mm:ss} [%X{traceId:-},%X{spanId:-}] ${LOG_LEVEL_PATTERN:-%5p} %m%n"
-              
-spring:
-  output:
-    ansi:
-      enabled: always
-  cloud:
-    gateway:
-      discovery:
-        locator:
-          enabled: true
-      routes:
-      - id: employee-service
-        uri: lb://employee-service
-        predicates:
-        - Path=/employee/**
-        filters:
-        - RewritePath=/employee/(?<path>.*), /$\{path}
-      - id: department-service
-        uri: lb://department-service
-        predicates:
-        - Path=/department/**
-        filters:
-        - RewritePath=/department/(?<path>.*), /$\{path}
-      - id: organization-service
-        uri: lb://organization-service
-        predicates:
-        - Path=/organization/**
-        filters:
-        - RewritePath=/organization/(?<path>.*), /$\{path}
-      - id: openapi
-        uri: http://localhost:${server.port}
-        predicates:
-        - Path=/v3/api-docs/**
-        filters:
-        - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
-
-springdoc:
-  swagger-ui:
-    urls:
-      - name: employee
-        url: /v3/api-docs/employee
-      - name: department
-        url: /v3/api-docs/department
-      - name: organization
-        url: /v3/api-docs/organization
-
-management:
-  tracing:
-    sampling:
-      probability: 1.0
-  zipkin:
-    tracing:
-      endpoint: http://zipkin:9411/api/v2/spans
+#server:
+#  port: 8060
+#
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://discovery-service:8761/eureka/
+#
+#logging:
+#  pattern:
+#    console: "%d{yyyy-MM-dd HH:mm:ss} [%X{traceId:-},%X{spanId:-}] ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+#
+#spring:
+#  output:
+#    ansi:
+#      enabled: always
+#  cloud:
+#    gateway:
+#      discovery:
+#        locator:
+#          enabled: true
+#      routes:
+#        - id: adminTask-service
+#          uri: lb://adminTask-service
+#          predicates:
+#            - Path=/adminTask/**
+#          filters:
+#            - RewritePath=/adminTask/(?<path>.*), /$\{path}
+#        - id: content-service
+#          uri: lb://content-service
+#          predicates:
+#            - Path=/content/**
+#          filters:
+#            - RewritePath=/content/(?<path>.*), /$\{path}
+#        - id: course-service
+#          uri: lb://course-service
+#          predicates:
+#            - Path=/course/**
+#          filters:
+#            - RewritePath=/course/(?<path>.*), /$\{path}
+#        - id: email-service
+#          uri: lb://email-service
+#          predicates:
+#            - Path=/email/**
+#          filters:
+#            - RewritePath=/email/(?<path>.*), /$\{path}
+#        - id: enrollment-service
+#          uri: lb://enrollment-service
+#          predicates:
+#            - Path=/enrollment/**
+#          filters:
+#            - RewritePath=/enrollment/(?<path>.*), /$\{path}
+#        - id: learner-service
+#          uri: lb://learner-service
+#          predicates:
+#            - Path=/learner/**
+#          filters:
+#            - RewritePath=/learner/(?<path>.*), /$\{path}
+#        - id: order-service
+#          uri: lb://order-service
+#          predicates:
+#            - Path=/order/**
+#          filters:
+#            - RewritePath=/order/(?<path>.*), /$\{path}
+#        - id: payment-service
+#          uri: lb://payment-service
+#          predicates:
+#            - Path=/payment/**
+#          filters:
+#            - RewritePath=/payment/(?<path>.*), /$\{path}
+#        - id: user-service
+#          uri: lb://user-service
+#          predicates:
+#            - Path=/user/**
+#          filters:
+#            - RewritePath=/user/(?<path>.*), /$\{path}
+#        - id: openapi
+#          uri: http://localhost:${server.port}
+#          predicates:
+#            - Path=/v3/api-docs/**
+#          filters:
+#            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
+##      - id: employee-service
+##        uri: lb://employee-service
+##        predicates:
+##        - Path=/employee/**
+##        filters:
+##        - RewritePath=/employee/(?<path>.*), /$\{path}
+##      - id: department-service
+##        uri: lb://department-service
+##        predicates:
+##        - Path=/department/**
+##        filters:
+##        - RewritePath=/department/(?<path>.*), /$\{path}
+##      - id: organization-service
+##        uri: lb://organization-service
+##        predicates:
+##        - Path=/organization/**
+##        filters:
+##        - RewritePath=/organization/(?<path>.*), /$\{path}
+#
+#
+#springdoc:
+#  swagger-ui:
+#    urls:
+#      - name: adminTask
+#        url: /v3/api-docs/adminTask
+#      - name: content
+#        url: /v3/api-docs/content
+#      - name: course
+#        url: /v3/api-docs/course
+#      - name: email
+#        url: /v3/api-docs/email
+#      - name: enrollment
+#        url: /v3/api-docs/enrollment
+#      - name: learner
+#        url: /v3/api-docs/learner
+#      - name: order
+#        url: /v3/api-docs/order
+#      - name: payment
+#        url: /v3/api-docs/payment
+#      - name: user
+#        url: /v3/api-docs/user
+##      - name: employee
+##        url: /v3/api-docs/employee
+##      - name: department
+##        url: /v3/api-docs/department
+##      - name: organization
+##        url: /v3/api-docs/organization
+#
+#management:
+#  tracing:
+#    sampling:
+#      probability: 1.0
+#  zipkin:
+#    tracing:
+#      endpoint: http://zipkin:9411/api/v2/spans
