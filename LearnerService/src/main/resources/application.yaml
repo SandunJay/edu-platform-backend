@@ -1,0 +1,22 @@
+spring:
+  config:
+    import: "optional:configserver:http://config-service:8088"
+    activate:
+      on-profile: docker
+---
+spring:
+  application:
+    name: Learner-Service
+  config:
+    import: "optional:configserver:http://localhost:8088"
+
+
+
+#spring.application.name=LearnerService
+#spring.banner.location=banner.txt
+#
+#server.port=7011
+#
+#enrollmentService.url=http://localhost:7010
+#courseService.url=http://localhost:7012
+#contentService.url=http://localhost:7013
