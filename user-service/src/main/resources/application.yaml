@@ -10,9 +10,9 @@ spring:
   config:
     import: "optional:configserver:http://localhost:8088"
   datasource:
-    url: jdbc:mysql://localhost:3306/jwt_security
+    url: jdbc:mysql://localhost:3308/jwt_security
     username: root
-    password: mH@cW98#$365mySQL
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -59,6 +59,6 @@ application:
   security:
     jwt:
       secret-key: QDozrk7CUofsDF1GY0NLVWY/B7lH+A9xoQ9ztn+XhRBa486xwK2ePhFxJesPVYX4UIicILdrjnH479zlt94+3TDJW7081lrfbNQYENzNq0epSHpTdtlqzntf4XONivFeRhAGslX5tnkgPOl1q3UQ5l15YNPapqg7iB6v6lySewI4BI47ncIjYcSAHl2+Rdt+wrcZOXsjIZmHJE/jcNfUhdsz8mXK6ftD4ZaLF14zofjPw2V6d7bnWc0nW34llx6JQvKId0wcCWwysh/XbK6cXd8HGdAkj7guaPvRp+hvVIq3WoIn4vMecoHe4Uja293p7jFNaMPYoT+SeacBSE9QqW6cPH5XPVaOjKFOLLgbohs=
-      expiration: 86400000 # one day
+      expiration: 86400000
       refresh-token:
-        expiration: 60480000 # 7 days
+        expiration: 60480000

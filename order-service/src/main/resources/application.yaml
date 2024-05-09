@@ -1,9 +1,4 @@
-spring:
-  config:
-    import: "optional:configserver:http://config-service:8088"
-    activate:
-      on-profile: docker
----
+# Default configuration (applicable when no specific profile is active)
 spring:
   application:
     name: order-service
@@ -11,12 +6,39 @@ spring:
     import: "optional:configserver:http://localhost:8088"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/order_service
+    url: jdbc:mysql://localhost:3307/order_service
     username: root
-    password: root
-    jpa:
-      hibernate:
-        ddl-auto: none
+    password: mysql
+  jpa:
+    hibernate:
+      ddl-auto: none
+  flyway:
+    locations: "classpath:db/migration"
+    enabled: true
+    baseline-on-migrate: true  # Useful when starting with a non-empty schema
+    out-of-order: true  # Allow migrations to run out of order in certain cases
+
+# Configuration for the 'docker' profile
+---
+#spring:
+#  config:
+#    import: "optional:configserver:http://config-service:8088"
+#  activate:
+#    on-profile: docker
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://db-host:3307/order_service
+#    username: root
+#    password: root
+#  jpa:
+#    hibernate:
+#      ddl-auto: none
+#  flyway:
+#    locations: "classpath:db/migration"
+#    enabled: true
+#    baseline-on-migrate: true
+#    out-of-order: true
+
 
 
 #spring.application.name=order-service
