@@ -11,7 +11,7 @@ spring:
 ---
 spring:
   application:
-    name: adminTask-Service
+    name: admin-service
   config:
     import: "optional:configserver:http://localhost:8088"
   autoconfigure:
