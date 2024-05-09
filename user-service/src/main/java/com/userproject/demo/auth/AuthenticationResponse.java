@@ -1,12 +1,11 @@
 package com.userproject.demo.auth;
 
-import ch.qos.logback.core.net.SMTPAppenderBase;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.userproject.demo.user.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.catalina.User;
 
 @Data
 @Builder
@@ -18,6 +17,7 @@ public class AuthenticationResponse {
     private String accessToken;
     @JsonProperty("refresh_token")
     private String refreshToken;
+    //private Role role;
 
 //    public String getUserDetails() {
 //        // Assuming you have a User object representing the authenticated user
@@ -38,6 +38,13 @@ public class AuthenticationResponse {
             return "User is not authenticated";
         }
     }
+
+
+//
+//    public String getRole() {
+//        return role;
+//    }
+
 
 
     //private String token;
