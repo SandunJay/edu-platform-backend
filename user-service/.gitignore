@@ -4,7 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-application.yml
+
+/mysql
+
 
 ### STS ###
 .apt_generated
