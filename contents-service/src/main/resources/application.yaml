@@ -1,27 +1,45 @@
 spring:
-  config:
-    import: "optional:configserver:http://config-service:8088"
-    activate:
-      on-profile: docker
----
-spring:
   application:
     name: content-service
   banner:
     location: banner.txt
   config:
-    import: "optional:configserver:http://localhost:8088"
+    import: optional:configserver:http://config-service:8088
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3304/content_service
-    username: root
+    url: jdbc:mysql://localhost:3310/content_service
     password: root
-    jpa:
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
       hibernate:
-        ddl-auto: none
         naming:
           physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+---
+#spring:
+#  application:
+#    name: content-service
+#  banner:
+#    location: banner.txt
+#  config:
+#    import: "optional:configserver:http://localhost:8088"
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3310/content_service
+#    username: root
+#    password: root
+#    jpa:
+#      hibernate:
+#        ddl-auto: none
+#        naming:
+#          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#
 
 
 cloudinary:

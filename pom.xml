@@ -23,9 +23,9 @@
     </properties>
 
     <modules>
+        <module>config-server</module>
         <module>discovery-service</module>
         <module>api-gateway</module>
-        <module>config-server</module>
         <module>admin-Service</module>
         <module>contents-service</module>
         <module>course-service</module>

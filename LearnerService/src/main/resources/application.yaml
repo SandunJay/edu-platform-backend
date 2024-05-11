@@ -1,18 +1,17 @@
 # Common configuration for all profiles
-spring:
-  application:
-    name: Learner-Service
-    banner:
-      location: banner.txt
+
 
 # Configuration for the 'docker' profile
 ---
 spring:
+  application:
+    name: learner-service
+  banner:
+    location: banner.txt
   config:
     import: "optional:configserver:http://config-service:8088"
-  activate:
-    on-profile: docker
-
+    activate:
+      on-profile: docker
 enrollmentService:
   url: http://enrollment-service:7010
 courseService:
@@ -20,24 +19,26 @@ courseService:
 contentService:
   url: http://content-service:7013
 
+
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
 # Default configuration (e.g., for local development)
 ---
-spring:
-  config:
-    import: "optional:configserver:http://localhost:8088"
-
-enrollmentService:
-  url: http://localhost:7010
-courseService:
-  url: http://localhost:7012
-contentService:
-  url: http://localhost:7013
-
-
-#spring.application.name=LearnerService
-#spring.banner.location=banner.txt
+#spring:
+#  config:
+#    import: "optional:configserver:http://localhost:8088"
 #
-#server.port=7011
-#
+#enrollmentService:
+#  url: http://localhost:7010
+#courseService:
+#  url: http://localhost:7012
+#contentService:
+#  url: http://localhost:7013
+
+
+
 
 

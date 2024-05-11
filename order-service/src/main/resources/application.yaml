@@ -1,49 +1,57 @@
-# Default configuration (applicable when no specific profile is active)
+# Common configuration for all profiles
 spring:
   application:
     name: order-service
-  config:
-    import: "optional:configserver:http://localhost:8088"
+  banner:
+    location: banner.txt
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/order_service
-    username: root
-    password: mysql
   jpa:
     hibernate:
       ddl-auto: none
   flyway:
     locations: "classpath:db/migration"
     enabled: true
-    baseline-on-migrate: true  # Useful when starting with a non-empty schema
-    out-of-order: true  # Allow migrations to run out of order in certain cases
+    baseline-on-migrate: true
+    out-of-order: true
+  springdoc:
+    swagger-ui:
+      path: /swagger-ui.html
 
-# Configuration for the 'docker' profile
+# Configuration for Docker profile
+---
+spring:
+  config:
+    import: "optional:configserver:http://config-service:8088"
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:mysql://localhost:3308/order_service
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: none
+  flyway:
+    locations: "classpath:db/migration"
+    enabled: true
+    baseline-on-migrate: true
+    out-of-order: true
+
+# Configuration for default profile (e.g., local development)
 ---
 #spring:
 #  config:
-#    import: "optional:configserver:http://config-service:8088"
-#  activate:
-#    on-profile: docker
+#    import: "optional:configserver:http://localhost:8088"
 #  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://db-host:3307/order_service
+#    url: jdbc:mysql://localhost:3307/order_service
 #    username: root
-#    password: root
+#    password: mysql
 #  jpa:
 #    hibernate:
 #      ddl-auto: none
 #  flyway:
-#    locations: "classpath:db/migration"
 #    enabled: true
 #    baseline-on-migrate: true
-#    out-of-order: true
 
 
-
-#spring.application.name=order-service
-#spring.datasource.url=jdbc:mysql://localhost:3306/order_service
-#spring.datasource.username=root
-#spring.datasource.password=992040084v
-#spring.jpa.hibernate.ddl-auto=none
-#server.port=8091
