@@ -1,47 +1,15 @@
-spring:
-  config:
-    import: "optional:configserver:http://config-service:8088"
-    activate:
-      on-profile: docker
----
+# Common configuration for all profiles
 spring:
   application:
     name: user-service
-  config:
-    import: "optional:configserver:http://localhost:8088"
+  banner:
+    location: banner.txt
   datasource:
-    url: jdbc:mysql://localhost:3306/jwt_security
-    username: root
-    password: mH@cW98#$365mySQL
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: none
     show-sql: true
-
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-        format_sql: true
-    database-platform: org.hibernate.dialect.MySQL8Dialect
-
-  #spring:
-#  application:
-#    name: demo
-#  datasource:
-#    url: jdbc:mysql://localhost:3306/jwt_security
-#    username: root
-#    password: mH@cW98#$365mySQL
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#  jpa:
-#    hibernate:
-#      ddl-auto: create-drop
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        format_sql: true
-#        dialect: org.hibernate.dialect.MySQL8Dialect
-#      database-platform: org.hibernate.dialect.MySQL8Dialect
   security:
     oauth2:
       client:
@@ -49,16 +17,92 @@ spring:
           google:
             clientId: 937264332283-k2jkgnctiipbvqc7b566ab506kct7lp2.apps.googleusercontent.com
             clientSecret: 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
-#
-#server:
-#  port: 8082
-#
-#
 
 application:
   security:
     jwt:
       secret-key: QDozrk7CUofsDF1GY0NLVWY/B7lH+A9xoQ9ztn+XhRBa486xwK2ePhFxJesPVYX4UIicILdrjnH479zlt94+3TDJW7081lrfbNQYENzNq0epSHpTdtlqzntf4XONivFeRhAGslX5tnkgPOl1q3UQ5l15YNPapqg7iB6v6lySewI4BI47ncIjYcSAHl2+Rdt+wrcZOXsjIZmHJE/jcNfUhdsz8mXK6ftD4ZaLF14zofjPw2V6d7bnWc0nW34llx6JQvKId0wcCWwysh/XbK6cXd8HGdAkj7guaPvRp+hvVIq3WoIn4vMecoHe4Uja293p7jFNaMPYoT+SeacBSE9QqW6cPH5XPVaOjKFOLLgbohs=
-      expiration: 86400000 # one day
+      expiration: 86400000
       refresh-token:
-        expiration: 60480000 # 7 days
+        expiration: 60480000
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+# Docker profile configuration
+---
+spring:
+  config:
+    import: "optional:configserver:http://config-service:8088"
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:mysql://localhost:3309/user_service
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+# Default configuration for local development
+---
+spring:
+  config:
+    import: "optional:configserver:http://localhost:8088"
+  datasource:
+    url: jdbc:mysql://localhost:3308/jwt_security
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+
+#spring:
+#  config:
+#    import: "optional:configserver:http://config-service:8088"
+#    activate:
+#      on-profile: docker
+#---
+#spring:
+#  application:
+#    name: user-service
+#  banner:
+#    location: banner.txt
+#  config:
+#    import: "optional:configserver:http://localhost:8088"
+#  datasource:
+#    url: jdbc:mysql://localhost:3308/jwt_security
+#    username: root
+#    password: root
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#  jpa:
+#    hibernate:
+#      ddl-auto: none
+#    show-sql: true
+#
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL8Dialect
+#        format_sql: true
+#    database-platform: org.hibernate.dialect.MySQL8Dialect
+#
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          google:
+#            clientId: 937264332283-k2jkgnctiipbvqc7b566ab506kct7lp2.apps.googleusercontent.com
+#            clientSecret: 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
+#
+#application:
+#  security:
+#    jwt:
+#      secret-key: QDozrk7CUofsDF1GY0NLVWY/B7lH+A9xoQ9ztn+XhRBa486xwK2ePhFxJesPVYX4UIicILdrjnH479zlt94+3TDJW7081lrfbNQYENzNq0epSHpTdtlqzntf4XONivFeRhAGslX5tnkgPOl1q3UQ5l15YNPapqg7iB6v6lySewI4BI47ncIjYcSAHl2+Rdt+wrcZOXsjIZmHJE/jcNfUhdsz8mXK6ftD4ZaLF14zofjPw2V6d7bnWc0nW34llx6JQvKId0wcCWwysh/XbK6cXd8HGdAkj7guaPvRp+hvVIq3WoIn4vMecoHe4Uja293p7jFNaMPYoT+SeacBSE9QqW6cPH5XPVaOjKFOLLgbohs=
+#      expiration: 86400000
+#      refresh-token:
+#        expiration: 60480000
+#springdoc:
+#  swagger-ui:
+#    path: /swagger-ui.html

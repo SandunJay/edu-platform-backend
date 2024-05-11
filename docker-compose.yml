@@ -6,31 +6,128 @@ services:
     extra_hosts: [ 'host.docker.internal:host-gateway' ]
     ports:
       - "9411:9411"
+    networks:
+      - lms_network
   config-service:
     image: lms/config-server:1.1-SNAPSHOT
     ports:
       - "8088:8088"
     healthcheck:
       test: curl --fail http://localhost:8088/enrollment/docker  || exit 1
-      interval: 5s
-      timeout: 2s
-      retries: 3
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    networks:
+      - lms_network
   discovery-service:
     image: lms/discovery-service:1.1-SNAPSHOT
     ports:
-      - "8061:8061"
+      - "8761:8761"
     depends_on:
       config-service:
         condition: service_healthy
     links:
       - config-service
     healthcheck:
-      test: curl --fail http://localhost:8061/eureka/v2/apps || exit 1
-      interval: 4s
-      timeout: 2s
-      retries: 3
+      test: curl --fail http://localhost:8761/eureka/v2/apps || exit 1
+      interval: 15s
+      timeout: 5s
+      retries: 10
     environment:
       SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - lms_network
+  mysql-Enrollment:
+      image: mysql:8.3.0
+      container_name: mysql-Enrollment
+      ports:
+        - "3307:3306"
+      environment:
+        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_DATABASE=enrollment_service
+      volumes:
+        - ./mysql/enrollment_data:/var/lib/mysql
+        - ./docker/mysql/init_enrollment.sql:/docker-entrypoint-initdb.d/init.sql
+      healthcheck:
+        test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+        interval: 15s
+        timeout: 5s
+        retries: 10
+      networks:
+        - lms_network
+  mysql-Order:
+      image: mysql:8.3.0
+      container_name: mysql-Order
+      ports:
+        - "3308:3306"
+      environment:
+        - MYSQL_ROOT_PASSWORD=mysql
+        - MYSQL_DATABASE=order_service
+      volumes:
+        - ./mysql/order_data:/var/lib/mysql
+        - ./docker/mysql/init_order.sql:/docker-entrypoint-initdb.d/init.sql
+      healthcheck:
+        test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+        interval: 15s
+        timeout: 5s
+        retries: 10
+      networks:
+        - lms_network
+  mysql-User:
+      image: mysql:8.3.0
+      container_name: mysql-User
+      ports:
+        - "3309:3306"
+      environment:
+        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_DATABASE=user_service
+      volumes:
+        - ./mysql/user_data:/var/lib/mysql
+        - ./docker/mysql/init_user.sql:/docker-entrypoint-initdb.d/init.sql
+      healthcheck:
+        test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+        interval: 15s
+        timeout: 5s
+        retries: 10
+      networks:
+        - lms_network
+  mysql-Content:
+      image: mysql:8.3.0
+      container_name: mysql-Content
+      ports:
+        - "3310:3306"
+      environment:
+        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_DATABASE=content_service
+      volumes:
+        - ./mysql/content_data:/var/lib/mysql
+        - ./docker/mysql/init_content.sql:/docker-entrypoint-initdb.d/init.sql
+      healthcheck:
+        test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+        interval: 15s
+        timeout: 5s
+        retries: 10
+      networks:
+        - lms_network
+  mongo-Course:
+      image: mongo:7.0.8
+      container_name: mongo-Course
+      ports:
+        - "27017:27017"
+      environment:
+        - MONGO_INITDB_ROOT_USERNAME=root
+        - MONGO_INITDB_ROOT_PASSWORD=root
+        - MONGO_INITDB_DATABASE=course_service
+      volumes:
+          - ./mongo/data:/data/db
+      networks:
+        - lms_network
+#      healthcheck:
+#        test: [ "CMD", "nc", "-z", "localhost", "27017" ]
+#        interval: 30s
+#        timeout: 10s
+#        retries: 15
+
   admin-service:
     image: lms/admin-service:1.2-SNAPSHOT
     ports:
@@ -42,22 +139,38 @@ services:
       - config-service
       - discovery-service
       - zipkin
+      - mysql-Enrollment
+      - mysql-Order
+      - mysql-User
+      - mongo-Course
+      - mysql-Content
     environment:
       SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - lms_network
   content-service:
     image: lms/contents-service:1.2-SNAPSHOT
     ports:
       - "8080"
     depends_on:
-        discovery-service:
-            condition: service_healthy
+      discovery-service:
+        condition: service_healthy
+      mysql-Content:
+        condition: service_healthy
     links:
         - config-service
         - discovery-service
         - zipkin
+        - mysql-Enrollment
+        - mysql-Order
+        - mysql-User
+        - mongo-Course
+        - mysql-Content
         - admin-service
     environment:
         SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - lms_network
   course-service:
     image: lms/course-service:1.2-SNAPSHOT
     ports:
@@ -65,14 +178,23 @@ services:
     depends_on:
       discovery-service:
         condition: service_healthy
+#      mongo-Course:
+#        condition: service_healthy
     links:
       - config-service
       - discovery-service
       - zipkin
+      - mysql-Enrollment
+      - mysql-Order
+      - mysql-User
+      - mongo-Course
+      - mysql-Content
       - admin-service
       - content-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
+    networks:
+        - lms_network
   email-service:
     image: lms/email-service:1.2-SNAPSHOT
     ports:
@@ -84,11 +206,18 @@ services:
       - config-service
       - discovery-service
       - zipkin
+      - mysql-Enrollment
+      - mysql-Order
+      - mysql-User
+      - mongo-Course
+      - mysql-Content
       - admin-service
       - content-service
       - course-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - lms_network
   enrollment-service:
     image: lms/enrollment-service:1.2-SNAPSHOT
     ports:
@@ -96,16 +225,25 @@ services:
     depends_on:
       discovery-service:
         condition: service_healthy
+      mysql-Enrollment:
+        condition: service_healthy
     links:
       - config-service
       - discovery-service
       - zipkin
+      - mysql-Enrollment
+      - mysql-Order
+      - mysql-User
+      - mongo-Course
+      - mysql-Content
       - admin-service
       - content-service
       - course-service
       - email-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - lms_network
   learner-service:
     image: lms/learner-service:1.2-SNAPSHOT
     ports:
@@ -117,6 +255,11 @@ services:
       - config-service
       - discovery-service
       - zipkin
+      - mysql-Enrollment
+      - mysql-Order
+      - mysql-User
+      - mongo-Course
+      - mysql-Content
       - admin-service
       - content-service
       - course-service
@@ -124,6 +267,8 @@ services:
       - enrollment-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - lms_network
   order-service:
     image: lms/order-service:1.2-SNAPSHOT
     ports:
@@ -131,10 +276,17 @@ services:
     depends_on:
       discovery-service:
         condition: service_healthy
+      mysql-Order:
+        condition: service_healthy
     links:
       - config-service
       - discovery-service
       - zipkin
+      - mysql-Enrollment
+      - mysql-Order
+      - mysql-User
+      - mongo-Course
+      - mysql-Content
       - admin-service
       - content-service
       - course-service
@@ -143,6 +295,8 @@ services:
       - learner-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - lms_network
   payment-service:
     image: lms/payment-service:1.2-SNAPSHOT
     ports:
@@ -154,6 +308,11 @@ services:
       - config-service
       - discovery-service
       - zipkin
+      - mysql-Enrollment
+      - mysql-Order
+      - mysql-User
+      - mongo-Course
+      - mysql-Content
       - admin-service
       - content-service
       - course-service
@@ -163,6 +322,8 @@ services:
       - order-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - lms_network
   user-service:
     image: lms/user-service:1.2-SNAPSHOT
     ports:
@@ -170,10 +331,17 @@ services:
     depends_on:
       discovery-service:
         condition: service_healthy
+      mysql-User:
+        condition: service_healthy
     links:
       - config-service
       - discovery-service
       - zipkin
+      - mysql-Enrollment
+      - mysql-Order
+      - mysql-User
+      - mongo-Course
+      - mysql-Content
       - admin-service
       - content-service
       - course-service
@@ -184,6 +352,8 @@ services:
       - payment-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - lms_network
   gateway-service:
     image: lms/api-gateway:1.1-SNAPSHOT
     ports:
@@ -196,6 +366,12 @@ services:
     links:
       - config-service
       - discovery-service
+      - zipkin
+      - mysql-Enrollment
+      - mysql-Order
+      - mysql-User
+      - mongo-Course
+      - mysql-Content
       - admin-service
       - content-service
       - course-service
@@ -205,4 +381,9 @@ services:
       - order-service
       - payment-service
       - user-service
-      - zipkin
+    networks:
+      - lms_network
+
+networks:
+  lms_network:
+    driver: bridge

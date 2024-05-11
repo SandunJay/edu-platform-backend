@@ -1,33 +1,15 @@
-spring:
-  config:
-    import: "optional:configserver:http://config-service:8088"
-    activate:
-      on-profile: docker
----
-spring:
-  application:
-    name: email-service
-  config:
-    import: "optional:configserver:http://localhost:8088"
-  mail:
-    host: smtp.gmail.com
-    username: hansaniwork1@gmail.com
-    password: sfjm ylep nbll qvig
-    port: 587
-    properties:
-      mail:
-        smtp:
-          starttls:
-            enable: true
-          auth: true
-
-
-##spring.application.name=email
+# Default configuration (used for local development)
 #spring:
+#  application:
+#    name: email-service
+#  banner:
+#    location: banner.txt
+#  config:
+#    import: "optional:configserver:http://localhost:8088"
 #  mail:
 #    host: smtp.gmail.com
 #    username: hansaniwork1@gmail.com
-#    password: sfjm ylep nbll qvig
+#    password: sfjm ylep nbll qvig  # Be cautious with sensitive information
 #    port: 587
 #    properties:
 #      mail:
@@ -36,7 +18,32 @@ spring:
 #            enable: true
 #          auth: true
 #
-#server:
-#  port: 8081
-#
-#
+#springdoc:
+#  swagger-ui:
+#    path: /swagger-ui.html
+
+# Docker profile configuration
+---
+spring:
+  application:
+    name: email-service
+  banner:
+    location: banner.txt
+  config:
+    import: "optional:configserver:http://config-service:8088"
+  mail:
+    host: smtp.gmail.com
+    username: hansaniwork1@gmail.com
+    password: sfjm ylep nbll qvig # Reuse the same email credentials
+    port: 587
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
