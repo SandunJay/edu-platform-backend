@@ -27,16 +27,16 @@ springdoc:
 
 # Default configuration (e.g., for local development)
 ---
-#spring:
-#  config:
-#    import: "optional:configserver:http://localhost:8088"
-#
-#enrollmentService:
-#  url: http://localhost:7010
-#courseService:
-#  url: http://localhost:7012
-#contentService:
-#  url: http://localhost:7013
+spring:
+  config:
+    import: "optional:configserver:http://localhost:8088"
+
+enrollmentService:
+  url: http://localhost:7010
+courseService:
+  url: http://localhost:7012
+contentService:
+  url: http://localhost:7013
 
 
 

@@ -1,55 +1,61 @@
+# Common configuration for all profiles
 spring:
   application:
     name: content-service
   banner:
     location: banner.txt
   config:
-    import: optional:configserver:http://config-service:8088
+    import: "optional:configserver:http://localhost:8088"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3310/content_service
+    url: jdbc:mysql://localhost:3310/content_service?allowPublicKeyRetrieval=true
+    username: root
     password: root
   jpa:
     hibernate:
       ddl-auto: none
-    properties:
-      hibernate:
-        naming:
-          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
 
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
----
-#spring:
-#  application:
-#    name: content-service
-#  banner:
-#    location: banner.txt
-#  config:
-#    import: "optional:configserver:http://localhost:8088"
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3310/content_service
-#    username: root
-#    password: root
-#    jpa:
-#      hibernate:
-#        ddl-auto: none
-#        naming:
-#          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-#
-
-
 cloudinary:
-    cloud_name: dakefcpof
-    api_key: 483786684224158
-    api_secret: Cd3r9-uzT6DH5vDiVqpvoA5cSjs
-    servlet:
-      multipart:
-        max-file-size: 200MB
-        max-request-size: 200MB
+  cloud_name: dfbqv9hqr
+  api_key: 234434566613793
+  api_secret: nlf8S2sJO36I6RIqsY15D1CUAG0
+
+# Docker-specific configuration
+---
+spring:
+  config:
+    import: "optional:configserver:http://config-service:8088"
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:mysql://mysql-Content:3306/content_service?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate.hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+  flyway:
+    locations: "classpath:db/migration"
+    enabled: true
+    baseline-on-migrate: true
+    out-of-order: true
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
 
 
 #spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
