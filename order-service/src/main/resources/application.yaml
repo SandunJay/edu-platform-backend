@@ -4,21 +4,25 @@ spring:
     name: order-service
   banner:
     location: banner.txt
+  config:
+    import: "optional:configserver:http://localhost:8088"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3308/order_service?allowPublicKeyRetrieval=true
+    username: root
+    password: root
   jpa:
     hibernate:
       ddl-auto: none
   flyway:
-    locations: "classpath:db/migration"
     enabled: true
     baseline-on-migrate: true
-    out-of-order: true
-  springdoc:
-    swagger-ui:
-      path: /swagger-ui.html
 
-# Configuration for Docker profile
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+# Docker-specific configuration
 ---
 spring:
   config:
@@ -26,32 +30,25 @@ spring:
     activate:
       on-profile: docker
   datasource:
-    url: jdbc:mysql://localhost:3308/order_service
+    url: jdbc:mysql://mysql-Order:3306/order_service?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true
     username: root
     password: root
   jpa:
     hibernate:
       ddl-auto: none
+    properties:
+      hibernate.hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
   flyway:
     locations: "classpath:db/migration"
     enabled: true
     baseline-on-migrate: true
     out-of-order: true
 
-# Configuration for default profile (e.g., local development)
+
+# Local development configuration
 ---
 #spring:
-#  config:
-#    import: "optional:configserver:http://localhost:8088"
 #  datasource:
-#    url: jdbc:mysql://localhost:3307/order_service
+#    url: jdbc:mysql://localhost:3305/order_service
 #    username: root
-#    password: mysql
-#  jpa:
-#    hibernate:
-#      ddl-auto: none
-#  flyway:
-#    enabled: true
-#    baseline-on-migrate: true
-
-
+#    password: root

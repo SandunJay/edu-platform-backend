@@ -8,7 +8,7 @@ spring:
     import: "optional:configserver:http://localhost:8088"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/enrollment_service
+    url: jdbc:mysql://localhost:3307/enrollment_service?allowPublicKeyRetrieval=true
     username: root
     password: root
   jpa:
@@ -39,12 +39,23 @@ spring:
     activate:
       on-profile: docker
   datasource:
-    url: jdbc:mysql://mysql-Enrollment:3307/enrollment_service
+    url: jdbc:mysql://mysql-Enrollment:3306/enrollment_service?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true
     username: root
     password: root
   jpa:
     hibernate:
       ddl-auto: none
+    properties:
+      hibernate.hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+  flyway:
+    locations: "classpath:db/migration"
+    enabled: true
+    baseline-on-migrate: true
+    out-of-order: true
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
 
 
 # Local development configuration

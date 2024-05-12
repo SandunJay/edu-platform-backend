@@ -20,7 +20,7 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: adminTask-service
+        - id: admin-service
           uri: lb://adminTask-service
           predicates:
             - Path=/adminTask/**
@@ -103,8 +103,8 @@ spring:
 springdoc:
   swagger-ui:
     urls:
-      - name: adminTask
-        url: /v3/api-docs/adminTask
+      - name: admin
+        url: /v3/api-docs/admin
       - name: content
         url: /v3/api-docs/content
       - name: course
