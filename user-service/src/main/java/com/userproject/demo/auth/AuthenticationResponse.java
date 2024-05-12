@@ -17,35 +17,27 @@ public class AuthenticationResponse {
     private String accessToken;
     @JsonProperty("refresh_token")
     private String refreshToken;
-    //private Role role;
+    @JsonProperty("firstname")
+    private String firstname;
+    @JsonProperty("lastname")
+    private String lastname;
+    @JsonProperty("email")
+    private String email;
+    @JsonProperty("role")
+    private Role role;
 
-//    public String getUserDetails() {
-//        // Assuming you have a User object representing the authenticated user
-//        // You would return some information about the user as a string
-//        // For example, you might return the username
-//        User user = null;
-//        return user.getUsername();
-//    }
+
 
     public String getUserDetails(org.apache.catalina.User user) {
         if (user != null) {
-            // Assuming you have a User object representing the authenticated user
-            // You would return some information about the user as a string
-            // For example, you might return the username
+
             return user.getUsername();
         } else {
-            // Handle the case when user is null
+
             return "User is not authenticated";
         }
     }
 
 
-//
-//    public String getRole() {
-//        return role;
-//    }
 
-
-
-    //private String token;
 }

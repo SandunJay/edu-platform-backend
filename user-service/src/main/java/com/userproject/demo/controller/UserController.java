@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -24,10 +25,18 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/users/{email}")
+    public UserResponse getUserByEmail(@PathVariable String email){
+        return userService.getUserByEmail(email);
+    }
+
+
     @GetMapping("/{id}")
     public UserResponse getUserById(@PathVariable Integer id){
         return userService.getUserById(id);
     }
+
+
 
     @PutMapping("/{id}")
     public void updateUser(@PathVariable Integer id, @RequestBody UserRequest userRequest) {

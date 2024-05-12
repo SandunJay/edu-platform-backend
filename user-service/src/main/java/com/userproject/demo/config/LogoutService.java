@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
@@ -33,6 +35,13 @@ public class LogoutService implements LogoutHandler {
             storedToken.setRevoked(true);
             tokenRepository.save(storedToken);
            // SecurityContextHolder.clearContext();
+
+            try {
+                response.sendRedirect("/");
+            } catch (IOException e) {
+                // Handle redirect exception
+                e.printStackTrace();
+            }
         }
     }
 }
