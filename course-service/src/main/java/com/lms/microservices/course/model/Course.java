@@ -21,5 +21,8 @@ public class Course {
     private String name;
     private String author;
     private String description;
+    private String learningoutcome;
+    private String category;
     private BigDecimal price;
+    private String imageurl;
 }
