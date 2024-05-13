@@ -5,8 +5,6 @@ import com.userproject.demo.config.JwtService;
 import com.userproject.demo.token.Token;
 import com.userproject.demo.token.TokenRepository;
 import com.userproject.demo.token.TokenType;
-import com.userproject.demo.user.Role;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.userproject.demo.user.UserRepository;
 import com.userproject.demo.user.User;
-
 import java.io.IOException;
 
 @Service
@@ -42,7 +39,7 @@ public class AuthenticationService {
                 .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .role(request.getRole())
                 .build();
 
         var savedUser = repository.save(user);
@@ -52,6 +49,10 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
+                .email(request.getEmail())
+                .role(request.getRole())
                 .build();
     }
 
@@ -75,8 +76,10 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .email(request.getEmail())
                 .build();
     }
+
 
     private void saveUserToken(User user, String jwtToken) {
         var token = Token.builder()
@@ -133,27 +136,12 @@ public class AuthenticationService {
         String userEmail = jwtService.extractUsername(jwtToken);
 
         if (userEmail != null) {
-            // Check if the user exists in the database
-           // return tokenRepository.existsByToken(jwtToken);
+
             return repository.existsByEmail(jwtToken);
         } else {
             return false; // If email is not found in token
         }
     }
 
-//    public boolean isValidUser(String jwtToken) {
-//        // Validate and decode JWT token
-//        Claims claims = jwtService.decodeJWT(jwtToken);
-//
-//        if (claims != null && claims.getSubject() != null) {
-//            // Extract user email from decoded claims
-//            String userEmail = claims.getSubject();
-//
-//            // Check if the user exists in the database
-//            return repository.existsByEmail(userEmail);
-//        } else {
-//            return false; // If token is invalid or doesn't contain user email
-//        }
-//    }
 
 }

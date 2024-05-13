@@ -1,17 +1,19 @@
 package com.userproject.demo.auth;
 
 import com.userproject.demo.token.JwtTokenUtil;
+import com.userproject.demo.user.Role;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.sql.*;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -34,38 +36,44 @@ public class AuthenticationController {
 
 
 
-        // Redirect based on user's role
-//        String redirectUrl = getRedirectUrl(String.valueOf(userDTO.getRole()));
-//        response.sendRedirect(redirectUrl);
-
 
         return ResponseEntity.ok(service.register(request));
     }
+
+
+
 
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request,
             HttpServletResponse response
+
     ) throws IOException {
+        // Authenticate the user and get the authentication response
         AuthenticationResponse authenticationResponse = service.authenticate(request);
 
-        String cookieValue = request.getEmail()  + "|" + authenticationResponse.getAccessToken();
+        String email = request.getEmail();
 
-        Cookie userCookie = new Cookie("userCookie", cookieValue);
-        userCookie.setMaxAge(3600);
-        userCookie.setPath("/");
-        response.addCookie(userCookie);
+        // Fetch user role from the database based on email
+        String role = fetchUserRoleByEmail(email);
 
-        // Extract user role from access token
-        //String userRole = jwtTokenUtil.extractUserRoleFromToken(authenticationResponse.getAccessToken());
+        if (role == null) {
+            // Handle case where user role is not found
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
-        /// Redirect based on user's role
-//        String redirectUrl = getRedirectUrl(userRole);
-//        response.sendRedirect(redirectUrl);
+        // Set the user role in the authentication response
+        authenticationResponse.setRole(Role.valueOf(role));
 
+
+
+        // Return the authentication response with the updated role
         return ResponseEntity.ok(authenticationResponse);
     }
+
+
+
 
     @GetMapping("/access-user-cookie")
     public ResponseEntity<String> accessUserCookie(HttpServletRequest request) {
@@ -104,17 +112,26 @@ public class AuthenticationController {
     }
 
 
-    private String getRedirectUrl(String role) {
-        switch (role) {
-            case "ADMIN":
-                return "/admin/dashboard";
-            case "USER":
-                return "/user/dashboard";
-            case "INSTRUCTOR":
-                return "/instructor/dashboard";
-            default:
-                return "/dashboard";
+
+
+
+    private String fetchUserRoleByEmail(String email) {
+        String role = null;
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jwt_security", "root", "mH@cW98#$365mySQL");
+             PreparedStatement statement = connection.prepareStatement("SELECT role FROM _user WHERE email = ?");
+        ) {
+            statement.setString(1, email);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    role = resultSet.getString("role");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle database errors
         }
+        return role;
     }
+
 
 }
