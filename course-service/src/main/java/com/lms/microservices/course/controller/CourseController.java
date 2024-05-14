@@ -9,13 +9,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/course")
 @RequiredArgsConstructor
 
 public class CourseController {
 
-    private final CourseService courseService;
+     private final CourseService courseService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -44,18 +46,18 @@ public class CourseController {
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/{courseId}")
     @ResponseStatus(HttpStatus.OK)
-    public CourseResponse updateCourse(@PathVariable String id, @RequestBody CourseRequest courseRequest) {
-        return courseService.updateCourse(id, courseRequest);
+    public CourseResponse updateCourse(@PathVariable String courseId, @RequestBody CourseRequest courseRequest) {
+        return courseService.updateCourse(courseId, courseRequest);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{courseId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCourse(@PathVariable String id) {
-    courseService.deleteCourse(id);
+    public void deleteCourse(@PathVariable String courseId) {
+        courseService.deleteCourse(courseId);
     }
-
+	
     @GetMapping("/{courseId}/exists")
     @ResponseStatus(HttpStatus.OK)
     public boolean existsCourseById(@PathVariable String courseId) {
