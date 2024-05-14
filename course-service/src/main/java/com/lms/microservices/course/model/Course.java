@@ -15,11 +15,14 @@ import java.math.BigDecimal;
 @Data
 
 public class Course {
-    @Id
+     @Id
     private String id;
     private String courseId;
     private String name;
     private String author;
     private String description;
+    private String learningoutcome;
+    private String category;
     private BigDecimal price;
+    private String imageurl;
 }
