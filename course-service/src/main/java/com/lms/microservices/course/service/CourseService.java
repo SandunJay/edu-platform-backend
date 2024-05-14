@@ -69,22 +69,29 @@ public class CourseService {
             return null;
         }
     }
+    public CourseResponse updateCourse(String courseId, CourseRequest courseRequest) {
+        Course course = courseRepository.findByCourseId(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found with id " + courseId));
 
-    public CourseResponse updateCourse(String id, CourseRequest courseRequest) {
-        Course course = courseRepository.findByCourseId(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Course not found with id " + id));
-        course.setName(courseRequest.name());
-        course.setAuthor(courseRequest.author());
-        course.setDescription(courseRequest.description());
-        course.setPrice(courseRequest.price());
+        if (courseRequest.name() != null) {
+            course.setName(courseRequest.name());
+        }
+        if (courseRequest.description() != null) {
+            course.setDescription(courseRequest.description());
+        }
+        if (courseRequest.price() != null) {
+            course.setPrice(courseRequest.price());
+        }
+        if (courseRequest.learningoutcome() != null) {
+            course.setLearningoutcome(courseRequest.learningoutcome());
+        }
         courseRepository.save(course);
         log.info("Course updated successfully");
         return new CourseResponse(course.getId(), course.getCourseId(),course.getName(),course.getAuthor(), course.getDescription(),course.getLearningoutcome(),course.getCategory(), course.getPrice(),course.getImageurl());
     }
-
-    public void deleteCourse(String id) {
-        Course course = courseRepository.findByCourseId(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Course not found with id " + id));
+    public void deleteCourse(String courseId) {
+        Course course = courseRepository.findByCourseId(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found with id " + courseId));
         courseRepository.delete(course);
         log.info("Course deleted successfully");
     }

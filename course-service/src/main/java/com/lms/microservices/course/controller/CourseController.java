@@ -15,6 +15,7 @@ import java.util.List;
 
 public class CourseController {
 
+
     private final CourseService courseService;
 
     @PostMapping
@@ -44,22 +45,24 @@ public class CourseController {
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/{courseId}")
     @ResponseStatus(HttpStatus.OK)
-    public CourseResponse updateCourse(@PathVariable String id, @RequestBody CourseRequest courseRequest) {
-        return courseService.updateCourse(id, courseRequest);
+    public CourseResponse updateCourse(@PathVariable String courseId, @RequestBody CourseRequest courseRequest) {
+        return courseService.updateCourse(courseId, courseRequest);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{courseId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCourse(@PathVariable String id) {
-    courseService.deleteCourse(id);
+    public void deleteCourse(@PathVariable String courseId) {
+        courseService.deleteCourse(courseId);
     }
 
-    @GetMapping("/{courseId}/exists")
+    @GetMapping("/exists/{courseId}")
     @ResponseStatus(HttpStatus.OK)
     public boolean existsCourseById(@PathVariable String courseId) {
         return courseService.existsCourseById(courseId);
     }
+
+
 
 }
