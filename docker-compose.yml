@@ -354,6 +354,35 @@ services:
       SPRING_PROFILES_ACTIVE: docker
     networks:
       - lms_network
+  auth-service:
+    image: lms/auth-service:1.2-SNAPSHOT
+    ports:
+      - "8080"
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+    links:
+      - config-service
+      - discovery-service
+      - zipkin
+      - mysql-Enrollment
+      - mysql-Order
+      - mysql-User
+      - mongo-Course
+      - mysql-Content
+      - admin-service
+      - content-service
+      - course-service
+      - email-service
+      - enrollment-service
+      - learner-service
+      - order-service
+      - payment-service
+      - user-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - lms_network
   gateway-service:
     image: lms/api-gateway:1.1-SNAPSHOT
     ports:
@@ -381,6 +410,7 @@ services:
       - order-service
       - payment-service
       - user-service
+      - auth-service
     networks:
       - lms_network
 
