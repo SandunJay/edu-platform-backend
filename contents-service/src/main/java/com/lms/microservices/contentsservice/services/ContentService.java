@@ -42,6 +42,8 @@ public class ContentService {
             content.setTitle(contentRequest.title());
             content.setDescription(contentRequest.description());
             content.setCourseId(contentRequest.courseId());
+            content.setVideoUrl(contentRequest.videoUrl());
+            content.setPdfUrl(contentRequest.pdfUrl());
             contentRepository.save(content);
         }else{
             throw new RuntimeException("Course not found with id " + contentRequest.courseId());
@@ -49,16 +51,32 @@ public class ContentService {
 
 }
 
-    public ContentResponse updateContent(String id, ContentRequest contentRequest) {
-        Content content = contentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Content not found with id " + id));
+    public ContentResponse updateContent(Long id, ContentRequest contentRequest) {
+    Content content = contentRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Content not found with id " + id));
+
+    if (contentRequest.title() != null) {
         content.setTitle(contentRequest.title());
-        content.setDescription(contentRequest.description());
-        content.setCourseId(contentRequest.courseId());
-        contentRepository.save(content);
-        log.info("Content updated successfully");
-        return new ContentResponse(content.getId(), content.getTitle(), content.getDescription(), content.getCourseId(), content.getCreatedDate(), content.getLastUpdatedDate());
     }
+    if (contentRequest.description() != null) {
+        content.setDescription(contentRequest.description());
+    }
+    if (contentRequest.courseId() != null) {
+        content.setCourseId(contentRequest.courseId());
+    }
+    if (contentRequest.videoUrl() != null) {
+        content.setVideoUrl(contentRequest.videoUrl());
+    }
+    if (contentRequest.pdfUrl() != null) {
+        content.setPdfUrl(contentRequest.pdfUrl());
+    }
+
+    contentRepository.save(content);
+    log.info("Content updated successfully");
+
+    return new ContentResponse(content.getId(), content.getTitle(), content.getDescription(), content.getCourseId(),content.getVideoUrl(),content.getPdfUrl(), content.getCreatedDate(), content.getLastUpdatedDate());
+}
+
 
 
 //    public List<Content> getContentsByCourseId(String courseId) {
