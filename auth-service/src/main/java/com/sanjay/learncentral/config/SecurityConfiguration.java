@@ -36,24 +36,14 @@ public class SecurityConfiguration {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/auth/**").permitAll() // Allow access to authentication endpoints
-                .requestMatchers(POST, "/api/v1/courses").hasRole("ADMIN") // Allow only ADMIN to create course
-                .requestMatchers(PUT, "/api/v1/courses/**").hasAnyRole("ADMIN", "FACULTY","LECTURER") // Allow ADMIN and LECTURER to update course
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/courses/**").hasAnyRole( "ADMIN","FACULTY") // Allow ADMIN and FACULTY to delete course
-                .requestMatchers("/api/v1/courses/**").permitAll() // Allow access to courses endpoints with authentication
-
-                // Room Controller Endpoints
-                .requestMatchers(POST, "/api/v1/rooms").hasRole("ADMIN")
-                .requestMatchers(GET, "/api/v1/rooms/**").authenticated()
-                .requestMatchers(GET, "/api/v1/rooms").hasAnyRole("FACULTY","ADMIN")
-                .requestMatchers(PUT, "/api/v1/rooms/**").hasRole("ADMIN")
-                .requestMatchers(DELETE, "/api/v1/rooms/**").hasRole("ADMIN")
-
 
                 .requestMatchers("/").permitAll() // Allow access to your application's root URL
                 .requestMatchers("/login").permitAll() // Allow access to your application's login page
                 .requestMatchers("/actuator/**").permitAll() // Example: restrict access to actuator endpoints
                 .requestMatchers("/grafana/**").permitAll()
-                .requestMatchers("/v3/api-docs/auth").permitAll()
+                .requestMatchers("/swagger-ui.html").permitAll()
+                .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers("/v3/api-docs/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
