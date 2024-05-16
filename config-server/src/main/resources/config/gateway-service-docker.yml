@@ -26,6 +26,12 @@ spring:
             - Path=/adminTask/**
           filters:
             - RewritePath=/adminTask/(?<path>.*), /$\{path}
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/**
+          filters:
+            - RewritePath=/auth/(?<path>.*), /$\{path}
         - id: content-service
           uri: lb://content-service
           predicates:

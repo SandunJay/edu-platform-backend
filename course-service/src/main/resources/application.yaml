@@ -9,12 +9,12 @@ spring:
       on-profile: docker
   data:
     mongodb:
-      uri: mongodb+srv://Sandun2001:Sandun2001@cluster0.r33qmfk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      uri: mongodb+srv://Sandun2001:Sandun2001@cluster0.r33qmfk.mongodb.net/course-service?retryWrites=true&w=majority&appName=Cluster0
       database: course-service
 
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
+#springdoc:
+#  swagger-ui:
+#    path: /swagger-ui.html
 
 ---
 #####Local
