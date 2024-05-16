@@ -14,8 +14,7 @@ logging:
     console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){blue} %clr([%X{traceId:-},%X{spanId:-}]){cyan} %clr(${LOG_LEVEL_PATTERN:-%5p}) %m%n"
 
 springdoc:
-  packagesToScan: com.sanjay.learncentral.auth
-  packageToScan: com.sanjay.learncentral.controller
+  packagesToScan: com.sanjay.learncentral.auth, com.sanjay.learncentral.controller
   cache:
     disabled: true
   version: '@springdoc.version@'
