@@ -30,6 +30,9 @@ public class Content {
     @Column(name = "videoUrl")
     private String videoUrl;
 
+     @Column(name = "pdfUrl")
+    private String pdfUrl;
+
     @CreatedDate
     @Column(updatable = false)
     private Date createdDate;
