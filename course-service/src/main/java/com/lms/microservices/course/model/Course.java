@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @Data
 
 public class Course {
-     @Id
+    @Id
     private String id;
     private String courseId;
     private String name;
@@ -25,4 +25,5 @@ public class Course {
     private String category;
     private BigDecimal price;
     private String imageurl;
+
 }

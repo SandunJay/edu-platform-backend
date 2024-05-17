@@ -44,6 +44,7 @@ public class ContentService {
             content.setCourseId(contentRequest.courseId());
             content.setVideoUrl(contentRequest.videoUrl());
             content.setPdfUrl(contentRequest.pdfUrl());
+            content.setStatus(false);
             contentRepository.save(content);
         }else{
             throw new RuntimeException("Course not found with id " + contentRequest.courseId());
@@ -51,11 +52,16 @@ public class ContentService {
 
 }
 
-    public ContentResponse updateContent(Long id, ContentRequest contentRequest) {
-    Content content = contentRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Content not found with id " + id));
+    public ContentResponse updateContent(String id, ContentRequest contentRequest) {
+        List<Content> contents = contentRepository.findById(id);
 
-    if (contentRequest.title() != null) {
+        if (contents.isEmpty()) {
+            throw new ResourceNotFoundException("Content not found with id " + id);
+        }
+
+        Content content = contents.get(0);
+
+        if (contentRequest.title() != null) {
         content.setTitle(contentRequest.title());
     }
     if (contentRequest.description() != null) {
@@ -74,37 +80,48 @@ public class ContentService {
     contentRepository.save(content);
     log.info("Content updated successfully");
 
-    return new ContentResponse(content.getId(), content.getTitle(), content.getDescription(), content.getCourseId(),content.getVideoUrl(),content.getPdfUrl(), content.getCreatedDate(), content.getLastUpdatedDate());
+    return new ContentResponse(content.getId(), content.getTitle(), content.getDescription(), content.getCourseId(),content.getVideoUrl(),content.getPdfUrl(), content.isStatus(),content.getCreatedDate(), content.getLastUpdatedDate());
 }
 
+     public List<Content> getContentsByCourseId(String courseId) {
+    return contentRepository.findByCourseId(courseId)
+                            .stream()
+                            .filter(Content::isStatus)
+                            .collect(Collectors.toList());
+     }
 
+    public ContentResponse getContentById(String id) {
+        List<Content> contents = contentRepository.findById(id);
+        if (contents.isEmpty()) {
+            throw new ResourceNotFoundException("Content not found for course id " + id);
+        }
+        Content content = contents.get(0);
+        return new ContentResponse(content.getId(), content.getTitle(), content.getDescription(), content.getCourseId(),content.getVideoUrl(),content.getPdfUrl(), content.isStatus(),content.getCreatedDate(), content.getLastUpdatedDate());
+    }
 
-//    public List<Content> getContentsByCourseId(String courseId) {
-//        return contentRepository.findByCourseId(courseId);
-//    }
-
-    public List<ContentResponse> getContentsByCourseId(String courseId) {
-        List<Content> contents = contentRepository.findByCourseId(courseId);
-        log.info("Retrieved contents for courseId {}: {}", courseId, contents);
-
-        return contents.stream()
-                .map(content -> new ContentResponse(
-                        content.getId(),
-                        content.getTitle(),
-                        content.getDescription(),
-                        content.getCourseId(),
-                        content.getCreatedDate(),
-                        content.getLastUpdatedDate()
-                ))
+    public List<Content> getUnapprovedContent() {
+        List<Content> allContents = contentRepository.findAll();
+        return allContents.stream()
+                .filter(content -> !content.isStatus()) // only include content that is not approved
                 .collect(Collectors.toList());
     }
 
-
-    public ContentResponse getContentById(String contentId)
-    {
-        Content content = contentRepository.findById(contentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Content not found with id " + contentId));
-        log.info("Content found successfully");
-        return new ContentResponse(content.getId(), content.getTitle(), content.getDescription(), content.getCourseId(), content.getCreatedDate(), content.getLastUpdatedDate());
+    public void approveContent(String id) {
+        List<Content> contents = contentRepository.findById(id);
+        if (contents.isEmpty()) {
+            throw new ResourceNotFoundException("Content not found for course id " + id);
+        }
+        for (Content content : contents) {
+            content.setStatus(true);
+            contentRepository.save(content);
+        }
     }
+
+
 }
+
+
+
+
+
+
