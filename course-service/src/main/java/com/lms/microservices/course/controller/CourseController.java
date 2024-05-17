@@ -17,7 +17,7 @@ import java.util.List;
 
 public class CourseController {
 
-     private final CourseService courseService;
+    private final CourseService courseService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -45,6 +45,12 @@ public class CourseController {
         return courseService.getCourseByCourseId(courseId);
     }
 
+    @GetMapping("/by-author/{author}")
+    @ResponseStatus(HttpStatus.OK)
+    public CourseResponse getCourseByAuthor(@PathVariable String author) {
+        return courseService.getCourseByAuthor(author);
+    }
+
 
     @PutMapping("/{courseId}")
     @ResponseStatus(HttpStatus.OK)
@@ -57,7 +63,7 @@ public class CourseController {
     public void deleteCourse(@PathVariable String courseId) {
         courseService.deleteCourse(courseId);
     }
-	
+
     @GetMapping("/{courseId}/exists")
     @ResponseStatus(HttpStatus.OK)
     public boolean existsCourseById(@PathVariable String courseId) {

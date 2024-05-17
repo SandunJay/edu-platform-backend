@@ -1,8 +1,6 @@
 package com.lms.microservices.course.service;
 
 
-
-
 import com.lms.microservices.course.dto.CourseRequest;
 import com.lms.microservices.course.dto.CourseResponse;
 import com.lms.microservices.course.exception.ResourceNotFoundException;
@@ -18,8 +16,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 
+
 public class CourseService {
- 
+
     private final CourseRepository courseRepository;
 
 
@@ -64,6 +63,24 @@ public class CourseService {
             }
 
             log.info("Course found successfully with courseId " + courseId);
+            return new CourseResponse(course.getId(), course.getCourseId(), course.getName(), course.getAuthor(), course.getDescription(),course.getLearningoutcome(),course.getCategory(), course.getPrice(), course.getImageurl());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public CourseResponse getCourseByAuthor(String author) {
+        try {
+            Course course = courseRepository.findByAuthor(author)
+                    .orElseThrow(() -> new ResourceNotFoundException("Course not found with author " + author));
+
+            if (course == null) {
+                log.info("Course not found with author " + author);
+                return null;
+            }
+
+            log.info("Course found successfully with author " + author);
             return new CourseResponse(course.getId(), course.getCourseId(), course.getName(), course.getAuthor(), course.getDescription(),course.getLearningoutcome(),course.getCategory(), course.getPrice(), course.getImageurl());
         } catch (Exception e) {
             e.printStackTrace();

@@ -39,6 +39,11 @@ public class Content {
     @Column(name = "pdfUrl")
     private String pdfUrl;
 
+    @Column(name = "status")
+    private boolean status;
+
+
+
     @CreatedDate
     @Column(name = "createdDate", nullable = false, updatable = false)
     private Date createdDate;
