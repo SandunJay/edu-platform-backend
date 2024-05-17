@@ -11,4 +11,6 @@ public interface LearnerService {
     public ResponseEntity<ContentDetailsMapDTO> getEnrolledCourseContent(String courseId);
 
     EnrollmentDTO updateProgress(Long enrollmentId, String contentId);
+
+    float getProgressPercentage(Long enrollmentId);
 }

@@ -1,3 +1,4 @@
+
 # Common configuration for all profiles
 spring:
   application:
@@ -14,9 +15,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#  flyway:
+#    enabled: true
+#    baseline-on-migrate: true
   servlet:
     multipart:
       max-file-size: 200MB
@@ -45,13 +48,15 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate.hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
-  flyway:
-    locations: "classpath:db/migration"
-    enabled: true
-    baseline-on-migrate: true
-    out-of-order: true
+#  flyway:
+#    locations: "classpath:db/migration"
+#    enabled: true
+#    baseline-on-migrate: true
+#    out-of-order: true
   servlet:
     multipart:
       max-file-size: 200MB

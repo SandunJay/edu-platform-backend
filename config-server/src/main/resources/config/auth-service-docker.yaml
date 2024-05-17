@@ -11,8 +11,7 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%X{traceId:-},%X{spanId:-}] ${LOG_LEVEL_PATTERN:-%5p} %m%n"
 
 springdoc:
-  packagesToScan: com.sanjay.learncentral.auth
-  packageToScan: com.sanjay.learncentral.controller
+  packagesToScan: com.sanjay.learncentral.auth , com.sanjay.learncentral.controller
 spring:
   output:
     ansi:

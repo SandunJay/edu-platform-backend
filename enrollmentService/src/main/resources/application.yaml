@@ -1,3 +1,4 @@
+
 # Common configuration for all profiles
 spring:
   application:
@@ -34,29 +35,29 @@ cloudinary:
 
 # Docker-specific configuration
 ---
-#spring:
-#  config:
-#    import: "optional:configserver:http://config-service:8088"
-#    activate:
-#      on-profile: docker
-#  datasource:
-#    url: jdbc:mysql://mysql-Enrollment:3306/enrollment_service?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true
-#    username: root
-#    password: root
-#  jpa:
-#    hibernate:
-#      ddl-auto: none
-#    properties:
-#      hibernate.hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
-#  flyway:
-#    locations: "classpath:db/migration"
-#    enabled: true
-#    baseline-on-migrate: true
-#    out-of-order: true
-#  servlet:
-#    multipart:
-#      max-file-size: 200MB
-#      max-request-size: 200MB
+spring:
+  config:
+    import: "optional:configserver:http://config-service:8088"
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:mysql://mysql-Enrollment:3306/enrollment_service?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate.hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+  flyway:
+    locations: "classpath:db/migration"
+    enabled: true
+    baseline-on-migrate: true
+    out-of-order: true
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
 
 
 # Local development configuration

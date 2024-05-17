@@ -48,10 +48,9 @@ public class ContentService {
         }else{
             throw new RuntimeException("Course not found with id " + contentRequest.courseId());
         }
-
 }
 
-    public ContentResponse updateContent(Long id, ContentRequest contentRequest) {
+    public ContentResponse updateContent(String id, ContentRequest contentRequest) {
     Content content = contentRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Content not found with id " + id));
 
@@ -93,6 +92,8 @@ public class ContentService {
                         content.getTitle(),
                         content.getDescription(),
                         content.getCourseId(),
+                        content.getVideoUrl(),
+                        content.getPdfUrl(),
                         content.getCreatedDate(),
                         content.getLastUpdatedDate()
                 ))
@@ -105,6 +106,6 @@ public class ContentService {
         Content content = contentRepository.findById(contentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Content not found with id " + contentId));
         log.info("Content found successfully");
-        return new ContentResponse(content.getId(), content.getTitle(), content.getDescription(), content.getCourseId(), content.getCreatedDate(), content.getLastUpdatedDate());
+        return new ContentResponse(content.getId(), content.getTitle(), content.getDescription(), content.getCourseId(),content.getVideoUrl(), content.getPdfUrl()  ,content.getCreatedDate(), content.getLastUpdatedDate());
     }
 }

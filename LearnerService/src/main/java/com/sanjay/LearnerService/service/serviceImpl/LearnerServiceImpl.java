@@ -97,4 +97,9 @@ public class LearnerServiceImpl implements LearnerService {
         return null;
     }
 
+    @Override
+    public float getProgressPercentage(Long enrollmentId) {
+        return 0;
+    }
+
 }
