@@ -30,8 +30,13 @@ public class Content {
     @Column(name = "videoUrl")
     private String videoUrl;
 
-     @Column(name = "pdfUrl")
+    @Column(name = "pdfUrl")
     private String pdfUrl;
+
+    @Column(name = "status")
+    private boolean status;
+
+
 
     @CreatedDate
     @Column(updatable = false)
