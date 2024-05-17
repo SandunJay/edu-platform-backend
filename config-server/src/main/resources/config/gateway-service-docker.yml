@@ -21,11 +21,11 @@ spring:
           enabled: true
       routes:
         - id: admin-service
-          uri: lb://adminTask-service
+          uri: lb://admin-service
           predicates:
-            - Path=/adminTask/**
+            - Path=/admin/**
           filters:
-            - RewritePath=/adminTask/(?<path>.*), /$\{path}
+            - RewritePath=/admin/(?<path>.*), /$\{path}
         - id: auth-service
           uri: lb://auth-service
           predicates:
@@ -74,12 +74,6 @@ spring:
             - Path=/payment/**
           filters:
             - RewritePath=/payment/(?<path>.*), /$\{path}
-        - id: user-service
-          uri: lb://user-service
-          predicates:
-            - Path=/user/**
-          filters:
-            - RewritePath=/user/(?<path>.*), /$\{path}
         - id: openapi
           uri: http://localhost:${server.port}
           predicates:
