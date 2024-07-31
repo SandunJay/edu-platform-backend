@@ -30,9 +30,9 @@ springdoc:
     path: /swagger-ui.html
 
 cloudinary:
-  cloud_name: dfbqv9hqr
-  api_key: 234434566613793
-  api_secret: nlf8S2sJO36I6RIqsY15D1CUAG0
+  cloud_name: 
+  api_key: 
+  api_secret: 
 
 # Docker-specific configuration
 ---
@@ -69,9 +69,9 @@ spring:
 #spring.datasource.password=root
 #spring.jpa.hibernate.ddl-auto=none
 #spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-#cloudinary.cloud_name=dakefcpof
-#cloudinary.api_key=483786684224158
-#cloudinary.api_secret=Cd3r9-uzT6DH5vDiVqpvoA5cSjs
+#cloudinary.cloud_name=
+#cloudinary.api_key=
+#cloudinary.api_secret=Cd3r9-
 #
 #spring.servlet.multipart.max-file-size=200MB
 #spring.servlet.multipart.max-request-size=200MB
