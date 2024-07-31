@@ -1,0 +1,69 @@
+
+# Common configuration for all profiles
+spring:
+  application:
+    name: enrollment-service
+  banner:
+    location: banner.txt
+  config:
+    import: "optional:configserver:http://localhost:8088"
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/enrollment_service?allowPublicKeyRetrieval=true
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: none
+  flyway:
+    locations: "classpath:db/migration"
+    enabled: true
+    baseline-on-migrate: true
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+cloudinary:
+  cloud_name: 
+  api_key: 
+  api_secret: 
+
+# Docker-specific configuration
+---
+spring:
+  config:
+    import: "optional:configserver:http://config-service:8088"
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:mysql://mysql-Enrollment:3306/enrollment_service?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate.hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+  flyway:
+    locations: "classpath:db/migration"
+    enabled: true
+    baseline-on-migrate: true
+    out-of-order: true
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+
+
+# Local development configuration
+---
+#spring:
+#  datasource:
+#    url: jdbc:mysql://localhost:3305/enrollment_service
+#    username: root
+#    password: root

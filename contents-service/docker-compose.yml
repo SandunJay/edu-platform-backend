@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.3.0
+    container_name: mysql-content
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: content_service
+    ports:
+      - "3304:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql

@@ -1,6 +1,6 @@
 package com.sanjay.LearnerService.service.serviceImpl;
 
-import com.sanjay.LearnerService.DTO.*;
+import com.sanjay.LearnerService.dto.*;
 import com.sanjay.LearnerService.client.ContentClient;
 import com.sanjay.LearnerService.client.CourseClient;
 import com.sanjay.LearnerService.client.EnrollmentClient;
@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,25 +51,27 @@ public class LearnerServiceImpl implements LearnerService {
         return ResponseEntity.ok(new CourseDetailsMapDTO(courseDetailsMap));
     }
 
-    @Override
     public ResponseEntity<ContentDetailsMapDTO> getEnrolledCourseContent(String courseId) {
         Map<String, ContentResponse> contentDetailsMap = new HashMap<>();
+
         try {
             List<ContentResponse> contentResponses = contentClient.getCourseContent(courseId);
+
             if (contentResponses != null) {
                 for (ContentResponse content : contentResponses) {
-                    contentDetailsMap.put(content.courseId(), content);
+                    contentDetailsMap.put(content.id(), content);
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         return ResponseEntity.ok(new ContentDetailsMapDTO(contentDetailsMap));
     }
 
+
     @Override
     public EnrollmentDTO updateProgress(Long enrollmentId, String contentId) {
-        String defaultCourseId = "xyz85";
 
         try{
             ContentResponse contentResponse = contentClient.getContentById(contentId);
@@ -86,7 +87,7 @@ public class LearnerServiceImpl implements LearnerService {
             progressTrackerDTO.setLastUpdatedDate(LocalDateTime.now());
 
             try{
-                return enrollmentClient.updateProgress(enrollmentId, defaultCourseId, progressTrackerDTO);
+                return enrollmentClient.updateProgress(enrollmentId, courseId, progressTrackerDTO);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -94,6 +95,11 @@ public class LearnerServiceImpl implements LearnerService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public float getProgressPercentage(Long enrollmentId) {
+        return 0;
     }
 
 }

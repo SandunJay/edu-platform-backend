@@ -1,7 +1,7 @@
 package com.sanjay.LearnerService.client;
 
-import com.sanjay.LearnerService.DTO.EnrollmentDTO;
-import com.sanjay.LearnerService.DTO.ProgressTrackerDTO;
+import com.sanjay.LearnerService.dto.EnrollmentDTO;
+import com.sanjay.LearnerService.dto.ProgressTrackerDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

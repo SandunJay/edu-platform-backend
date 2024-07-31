@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/course")
 @RequiredArgsConstructor
@@ -43,16 +45,29 @@ public class CourseController {
         return courseService.getCourseByCourseId(courseId);
     }
 
-
-    @PutMapping("/{id}")
+    @GetMapping("/by-author/{author}")
     @ResponseStatus(HttpStatus.OK)
-    public CourseResponse updateCourse(@PathVariable String id, @RequestBody CourseRequest courseRequest) {
-        return courseService.updateCourse(id, courseRequest);
+    public CourseResponse getCourseByAuthor(@PathVariable String author) {
+        return courseService.getCourseByAuthor(author);
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCourse(@PathVariable String id) {
-    courseService.deleteCourse(id);
+
+    @PutMapping("/{courseId}")
+    @ResponseStatus(HttpStatus.OK)
+    public CourseResponse updateCourse(@PathVariable String courseId, @RequestBody CourseRequest courseRequest) {
+        return courseService.updateCourse(courseId, courseRequest);
     }
+
+    @DeleteMapping("/{courseId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCourse(@PathVariable String courseId) {
+        courseService.deleteCourse(courseId);
+    }
+
+    @GetMapping("/{courseId}/exists")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean existsCourseById(@PathVariable String courseId) {
+        return courseService.existsCourseById(courseId);
+    }
+
 }

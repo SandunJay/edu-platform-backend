@@ -1,3 +1,4 @@
+
 HELP.md
 target/
 
@@ -33,3 +34,20 @@ build/
 
 ### VS Code ###
 .vscode/
+.idea/
+/.idea/
+
+mysql/content_data/
+/mysql/content_data/
+mysql/enrollment_data/
+/mysql/enrollment_data/
+mysql/order_data/
+/mysql/order_data/
+mysql/user_data/
+/mysql/user_data/
+mongo/data/
+/mongo/data/
+mysql/
+mongo/
+/mysql/
+/mongo/
