@@ -8,13 +8,13 @@ spring:
     import: "optional:configserver:http://localhost:8088"
   data:
     mongodb:
-      uri: mongodb+srv://Sandun2001:Sandun2001@cluster0.r33qmfk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      uri:
       database: AuthService
   mail:
     host: smtp.gmail.com
     port: 587
-    username: learncentral.ad@gmail.com
-    password: qbvf kmll aqxq xdqw
+    username:
+    password:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
@@ -45,13 +45,13 @@ spring:
       on-profile: docker
   data:
     mongodb:
-      uri: mongodb+srv://Sandun2001:Sandun2001@cluster0.r33qmfk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      uri:
       database: AuthService
   mail:
     host: smtp.gmail.com
     port: 587
-    username: learncentral.ad@gmail.com
-    password: qbvf kmll aqxq xdqw
+    username: 
+    password: 
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
@@ -78,13 +78,13 @@ application:
 #spring:
 #  data:
 #    mongodb:
-#      uri: mongodb+srv://Sandun2001:Sandun2001@cluster0.r33qmfk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+#      uri: 
 #      database: AuthService
 #  mail:
 #    host: smtp.gmail.com
 #    port: 587
-#    username: learncentral.ad@gmail.com
-#    password: qbvf kmll aqxq xdqw
+#    username: 
+#    password: 
 #    properties:
 #      mail.smtp.auth: true
 #      mail.smtp.starttls.enable: true
