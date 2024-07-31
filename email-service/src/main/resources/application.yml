@@ -8,8 +8,8 @@ spring:
     import: "optional:configserver:http://localhost:8088"
   mail:
     host: smtp.gmail.com
-    username: hansaniwork1@gmail.com
-    password: sfjm ylep nbll qvig  # Be cautious with sensitive information
+    username: 
+    password: 
     port: 587
     properties:
       mail:
@@ -35,8 +35,8 @@ spring:
       on-profile: docker
   mail:
     host: smtp.gmail.com
-    username: hansaniwork1@gmail.com
-    password: sfjm ylep nbll qvig # Reuse the same email credentials
+    username: 
+    password: 
     port: 587
     properties:
       mail:
