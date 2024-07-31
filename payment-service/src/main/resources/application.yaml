@@ -2,8 +2,8 @@
 # Stripe configuration
 stripe:
   api:
-    publicKey: pk_test_51PAG7VSEMTakDOaEfnDW1jukOAvF2rqhrvZyA8xjI3A6zboQmcY8xCNrVLfRD1niDrGihvQ2MnRQTgYS8kympJ5t00HZwWR4fT
-    secretKey: sk_test_51PAG7VSEMTakDOaEXo7CML93QLTxSK1OpkjxHv1qXEAdyFYUWO37D1VDxBKcF8xqDqhq9FgufCHwkHDp3H2Jbbll00ZAtxBfIC
+    publicKey: 
+    secretKey: 
 
 
 springdoc:
