@@ -29,9 +29,9 @@ springdoc:
     path: /swagger-ui.html
 
 cloudinary:
-  cloud_name: dfbqv9hqr
-  api_key: 234434566613793
-  api_secret: nlf8S2sJO36I6RIqsY15D1CUAG0
+  cloud_name: 
+  api_key: 
+  api_secret: 
 
 # Docker-specific configuration
 ---
