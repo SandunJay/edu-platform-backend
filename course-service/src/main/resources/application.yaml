@@ -10,7 +10,7 @@ spring:
       on-profile: docker
   data:
     mongodb:
-      uri: mongodb+srv://Sandun2001:Sandun2001@cluster0.r33qmfk.mongodb.net/course-service?retryWrites=true&w=majority&appName=Cluster0
+      uri: 
       database: course-service
 
 #springdoc:
@@ -28,7 +28,7 @@ spring:
     import: "optional:configserver:http://localhost:8088"
   data:
     mongodb:
-      uri: mongodb+srv://Sandun2001:Sandun2001@cluster0.r33qmfk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      uri: 
       database: course-service
 #  data:
 #    mongodb:
